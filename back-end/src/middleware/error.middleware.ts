@@ -3,7 +3,11 @@ import { StatusCodes } from "http-status-codes";
 
 import { CustomAPIError } from "../errors";
 
-type ErrorWithCode = Error & { code?: number };
+type ErrorWithDetails = Error & {
+  code?: number;
+  status?: number;
+  type?: string;
+};
 
 export const errorHandler = (
   error: Error,
@@ -21,7 +25,16 @@ export const errorHandler = (
     return;
   }
 
-  if ((error as ErrorWithCode).code === 11000) {
+  const errorWithDetails = error as ErrorWithDetails;
+
+  if (errorWithDetails.type === "entity.parse.failed") {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: "Invalid JSON request body",
+    });
+    return;
+  }
+
+  if (errorWithDetails.code === 11000) {
     res.status(StatusCodes.CONFLICT).json({
       message: "A user with that username or email already exists",
     });

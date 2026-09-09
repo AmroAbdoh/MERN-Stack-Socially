@@ -94,7 +94,6 @@ const UserSchema = new Schema<IUser>(
       required: true,
       select: false,
       trim: true,
-      lowercase: true,
     },
   },
   { timestamps: true },
@@ -108,7 +107,10 @@ UserSchema.pre("save", async function () {
 
   if (this.isModified("securityAnswer")) {
     const salt = await bcrypt.genSalt(10);
-    this.securityAnswer = await bcrypt.hash(this.securityAnswer, salt);
+    this.securityAnswer = await bcrypt.hash(
+      this.securityAnswer.trim().toLowerCase(),
+      salt,
+    );
   }
 });
 
