@@ -1,0 +1,56 @@
+1. Authentication              
+   ├── Register
+   ├── Login
+   ├── Forgot password
+   ├── Reset password
+   └── JWT authentication
+
+2. User Management             ← NEXT
+   ├── Get current user
+   ├── Get user by username
+   ├── Update profile
+   ├── Upload/change avatar
+   ├── Follow user
+   └── Unfollow user
+
+3. Posts
+   ├── Create post
+   ├── Get posts/feed
+   ├── Get single post
+   ├── Update post
+   ├── Delete post
+   └── Like/unlike post
+
+4. Comments
+   ├── Add comment
+   ├── Get comments
+   ├── Update comment
+   └── Delete comment
+
+5. Feed
+   ├── Following feed
+   ├── Pagination
+   └── Sorting
+
+6. Search
+   ├── Search users
+   └── Search posts
+
+7. Notifications
+   ├── Follow notification
+   ├── Like notification
+   ├── Comment notification
+   └── Mark as read
+
+8. Real-time
+   ├── Socket.IO
+   ├── Real-time notifications
+   └── Messaging
+
+9. Final backend work
+   ├── Validation
+   ├── Error handling
+   ├── Security
+   ├── Pagination
+   ├── Rate limiting
+   └── API documentation

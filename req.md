@@ -1,7 +1,7 @@
 Social Media Platform
 
 
-- User authentication
+- User authentication | Done
 - User profiles
 - Create, edit, and delete posts
 - Like/unlike posts

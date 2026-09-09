@@ -9,7 +9,7 @@ import {
 } from "../utils/passwordReset";
 import { signJWT } from "../utils/jwt";
 
-export const register = async (
+const register = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -53,7 +53,7 @@ export const register = async (
   }
 };
 
-export const login = async (
+const login = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -98,7 +98,7 @@ export const login = async (
   }
 };
 
-export const forgotPassword = async (
+const forgotPassword = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -124,7 +124,7 @@ export const forgotPassword = async (
   }
 };
 
-export const verifySecurityAnswer = async (
+const verifySecurityAnswer = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -152,7 +152,7 @@ export const verifySecurityAnswer = async (
   }
 };
 
-export const resetPassword = async (
+const resetPassword = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -187,3 +187,5 @@ export const resetPassword = async (
     next(error);
   }
 };
+
+export { register, login, forgotPassword, verifySecurityAnswer, resetPassword };

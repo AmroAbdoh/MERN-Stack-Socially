@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import multer from "multer";
 
 import { CustomAPIError } from "../errors";
 
@@ -31,6 +32,21 @@ export const errorHandler = (
     res.status(StatusCodes.BAD_REQUEST).json({
       message: "Invalid JSON request body",
     });
+    return;
+  }
+
+  if (error instanceof multer.MulterError) {
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message:
+        error.code === "LIMIT_FILE_SIZE"
+          ? "Avatar file must be 5 MB or smaller"
+          : error.message,
+    });
+    return;
+  }
+
+  if (error.message === "Only image files are allowed") {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
     return;
   }
 
