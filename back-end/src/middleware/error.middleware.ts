@@ -1,0 +1,35 @@
+import { NextFunction, Request, Response } from "express";
+import { StatusCodes } from "http-status-codes";
+
+import { CustomAPIError } from "../errors";
+
+type ErrorWithCode = Error & { code?: number };
+
+export const errorHandler = (
+  error: Error,
+  _req: Request,
+  res: Response,
+  _next: NextFunction,
+): void => {
+  if (error instanceof CustomAPIError) {
+    res.status(error.statusCode).json({ message: error.message });
+    return;
+  }
+
+  if (error.name === "ValidationError") {
+    res.status(StatusCodes.BAD_REQUEST).json({ message: error.message });
+    return;
+  }
+
+  if ((error as ErrorWithCode).code === 11000) {
+    res.status(StatusCodes.CONFLICT).json({
+      message: "A user with that username or email already exists",
+    });
+    return;
+  }
+
+  console.error(error);
+  res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    message: "Internal server error",
+  });
+};
