@@ -21,13 +21,13 @@
    ├── Delete post
    └── Like/unlike post
 
-4. Comments              ← NEXT
+4. Comments              
    ├── Add comment
    ├── Get comments
    ├── Update comment
    └── Delete comment
 
-5. Feed
+5. Feed              ← NEXT
    ├── Following feed
    ├── Pagination
    └── Sorting
