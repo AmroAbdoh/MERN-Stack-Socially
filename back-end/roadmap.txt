@@ -5,7 +5,7 @@
    ├── Reset password
    └── JWT authentication
 
-2. User Management             ← NEXT
+2. User Management             
    ├── Get current user
    ├── Get user by username
    ├── Update profile
@@ -13,7 +13,7 @@
    ├── Follow user
    └── Unfollow user
 
-3. Posts
+3. Posts                    ← NEXT
    ├── Create post
    ├── Get posts/feed
    ├── Get single post
