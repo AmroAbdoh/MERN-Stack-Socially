@@ -10,7 +10,7 @@ import { authenticateUser } from "../middleware/auth.middleware";
 
 const router = Router();
 
-router.get("/posts/:postId/comments", getPostComments);
+router.get("/posts/:postId/comments", authenticateUser, getPostComments);
 router.post("/posts/:postId/comments", authenticateUser, createComment);
 router.patch("/comments/:id", authenticateUser, updateComment);
 router.delete("/comments/:id", authenticateUser, deleteComment);

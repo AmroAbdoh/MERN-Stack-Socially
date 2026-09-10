@@ -38,9 +38,8 @@
 
 7. Notifications
    ├── Follow notification
-   ├── Like notification
-   ├── Comment notification
-   └── Mark as read
+   ├── Like notification 
+   └── Comment notification
 
 8. Real-time
    ├── Socket.IO

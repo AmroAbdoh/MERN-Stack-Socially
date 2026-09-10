@@ -26,6 +26,10 @@ const createComment = asyncHandler(async (req, res) => {
     throw new NotFoundError("Post not found");
   }
 
+  if (post.visibility === "private" && post.postedBy.toString() !== userId) {
+    throw new NotFoundError("Post not found");
+  }
+
   const comment = await Comment.create({
     post: postId,
     postedBy: userId,
@@ -39,11 +43,16 @@ const createComment = asyncHandler(async (req, res) => {
 });
 
 const getPostComments = asyncHandler(async (req, res) => {
+  const userId = req.user?.userId;
   const { postId } = req.params;
 
   const post = await Post.findById(postId);
 
   if (!post) {
+    throw new NotFoundError("Post not found");
+  }
+
+  if (post.visibility === "private" && post.postedBy.toString() !== userId) {
     throw new NotFoundError("Post not found");
   }
 

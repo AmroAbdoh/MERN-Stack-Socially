@@ -48,16 +48,15 @@ const getPost = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const userId = req.user?.userId;
 
-  const post = await Post.findById(id).populate(
-    "postedBy",
-    "name username avatar",
-  );
+  const post = await Post.findById(id);
 
   if (!post) throw new NotFoundError("Post not found");
 
   if (post.visibility === "private" && post.postedBy.toString() !== userId) {
     throw new NotFoundError("Post not found");
   }
+
+  await post.populate("postedBy", "name username avatar");
 
   res.status(StatusCodes.OK).json({
     post,
@@ -77,6 +76,10 @@ const updatePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(id);
 
   if (!post) throw new NotFoundError("Post not found");
+
+  if (post.visibility === "private" && post.postedBy.toString() !== userId) {
+    throw new NotFoundError("Post not found");
+  }
 
   if (post.postedBy.toString() !== userId)
     throw new UnauthenticatedError("You are not allowed to update this post");
@@ -135,6 +138,10 @@ const likePost = asyncHandler(async (req, res) => {
 
   if (!post) throw new NotFoundError("Post not found");
 
+  if (post.visibility === "private" && post.postedBy.toString() !== userId) {
+    throw new NotFoundError("Post not found");
+  }
+
   const alreadyLiked = post.likedBy.some((user) => user.toString() === userId);
 
   if (alreadyLiked) throw new BadRequestError("Post already liked");
@@ -159,6 +166,10 @@ const unlikePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(id);
 
   if (!post) throw new NotFoundError("Post not found");
+
+  if (post.visibility === "private" && post.postedBy.toString() !== userId) {
+    throw new NotFoundError("Post not found");
+  }
 
   const alreadyLiked = post.likedBy.some((user) => user.toString() === userId);
 
