@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 
 import Post from "../models/post.model";
+import Comment from "../models/comment.model";
 import {
   BadRequestError,
   UnauthenticatedError,
@@ -54,10 +55,7 @@ const getPost = asyncHandler(async (req, res) => {
 
   if (!post) throw new NotFoundError("Post not found");
 
-  if (
-    post.visibility === "private" &&
-    post.postedBy.toString() !== userId
-  ) {
+  if (post.visibility === "private" && post.postedBy.toString() !== userId) {
     throw new NotFoundError("Post not found");
   }
 
@@ -118,6 +116,7 @@ const deletePost = asyncHandler(async (req, res) => {
   if (post.postedBy.toString() !== userId)
     throw new UnauthenticatedError("You are not allowed to delete this post");
 
+  await Comment.deleteMany({ post: post._id });
   await post.deleteOne();
 
   res.status(StatusCodes.OK).json({
@@ -175,7 +174,7 @@ const unlikePost = asyncHandler(async (req, res) => {
   });
 });
 
-export = {
+export {
   createPost,
   getPosts,
   getPost,

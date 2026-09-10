@@ -13,7 +13,7 @@
    ├── Follow user
    └── Unfollow user
 
-3. Posts                    ← NEXT
+3. Posts                    
    ├── Create post
    ├── Get posts/feed
    ├── Get single post
@@ -21,7 +21,7 @@
    ├── Delete post
    └── Like/unlike post
 
-4. Comments
+4. Comments              ← NEXT
    ├── Add comment
    ├── Get comments
    ├── Update comment
