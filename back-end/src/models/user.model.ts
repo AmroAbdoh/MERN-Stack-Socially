@@ -4,6 +4,10 @@ import {
   SECURITY_QUESTIONS,
   SecurityQuestion,
 } from "../constants/securityQuestions";
+import {
+  isStrongPassword,
+  PASSWORD_VALIDATION_MESSAGE,
+} from "../validators/password.validator";
 
 export interface IUser extends Document {
   name: string;
@@ -54,13 +58,8 @@ const UserSchema = new Schema<IUser>(
       minlength: 8,
       select: false, // won't be returned in queries by default
       validate: {
-        validator: function (value: string) {
-          return /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&._\-#^()~])/.test(
-            value,
-          );
-        },
-        message:
-          "Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special character.",
+        validator: isStrongPassword,
+        message: PASSWORD_VALIDATION_MESSAGE,
       },
     },
     avatar: {
