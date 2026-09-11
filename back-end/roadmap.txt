@@ -27,7 +27,7 @@
    ├── Update comment
    └── Delete comment
 
-5. Feed              ← NEXT
+5. Feed              
    ├── Following feed
    ├── Pagination
    └── Sorting
@@ -36,7 +36,7 @@
    ├── Search users
    └── Search posts
 
-7. Notifications
+7. Notifications     ← NEXT
    ├── Follow notification
    ├── Like notification 
    └── Comment notification

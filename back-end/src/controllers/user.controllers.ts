@@ -1,7 +1,9 @@
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, UnauthenticatedError } from "../errors";
+import Notification from "../models/notification.model";
 import User from "../models/user.model";
 import { asyncHandler } from "../utils/asyncHandler";
+import { createNotification } from "../utils/notifications";
 
 const getCurrentUser = asyncHandler(async (req, res) => {
   const userId = req.user?.userId;
@@ -131,6 +133,10 @@ const followUser = asyncHandler(async (req, res) => {
     throw new BadRequestError("You cannot follow yourself");
   }
 
+  const wasFollowing = targetUser.followers.some(
+    (follower) => follower.toString() === userId,
+  );
+
   await Promise.all([
     User.updateOne(
       { _id: userId },
@@ -141,6 +147,14 @@ const followUser = asyncHandler(async (req, res) => {
       { $addToSet: { followers: userId } },
     ),
   ]);
+
+  if (!wasFollowing) {
+    await createNotification({
+      recipient: targetUser._id,
+      sender: userId,
+      type: "follow",
+    });
+  }
 
   res.status(StatusCodes.OK).json({
     message: "User followed successfully",
@@ -165,6 +179,11 @@ const unfollowUser = asyncHandler(async (req, res) => {
   await Promise.all([
     User.updateOne({ _id: userId }, { $pull: { following: targetUser._id } }),
     User.updateOne({ _id: targetUser._id }, { $pull: { followers: userId } }),
+    Notification.deleteOne({
+      recipient: targetUser._id,
+      sender: userId,
+      type: "follow",
+    }),
   ]);
 
   res.status(StatusCodes.OK).json({

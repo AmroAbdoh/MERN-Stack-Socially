@@ -1,12 +1,14 @@
 import { StatusCodes } from "http-status-codes";
 import Post from "../models/post.model";
 import Comment from "../models/comment.model";
+import Notification from "../models/notification.model";
 import {
   BadRequestError,
   UnauthenticatedError,
   NotFoundError,
 } from "../errors";
 import { asyncHandler } from "../utils/asyncHandler";
+import { createNotification } from "../utils/notifications";
 
 const createComment = asyncHandler(async (req, res) => {
   const userId = req.user?.userId;
@@ -34,6 +36,14 @@ const createComment = asyncHandler(async (req, res) => {
     post: postId,
     postedBy: userId,
     text: text.trim(),
+  });
+
+  await createNotification({
+    recipient: post.postedBy,
+    sender: userId,
+    type: "comment",
+    post: post._id,
+    comment: comment._id,
   });
 
   res.status(StatusCodes.CREATED).json({
@@ -128,6 +138,7 @@ const deleteComment = asyncHandler(async (req, res) => {
   }
 
   await comment.deleteOne();
+  await Notification.deleteMany({ comment: comment._id });
 
   res.status(StatusCodes.OK).json({
     message: "Comment deleted successfully",

@@ -2,12 +2,14 @@ import { StatusCodes } from "http-status-codes";
 
 import Post from "../models/post.model";
 import Comment from "../models/comment.model";
+import Notification from "../models/notification.model";
 import {
   BadRequestError,
   UnauthenticatedError,
   NotFoundError,
 } from "../errors";
 import { asyncHandler } from "../utils/asyncHandler";
+import { createNotification } from "../utils/notifications";
 
 const createPost = asyncHandler(async (req, res) => {
   const userId = req.user?.userId;
@@ -120,6 +122,7 @@ const deletePost = asyncHandler(async (req, res) => {
     throw new UnauthenticatedError("You are not allowed to delete this post");
 
   await Comment.deleteMany({ post: post._id });
+  await Notification.deleteMany({ post: post._id });
   await post.deleteOne();
 
   res.status(StatusCodes.OK).json({
@@ -150,6 +153,13 @@ const likePost = asyncHandler(async (req, res) => {
 
   await post.save();
 
+  await createNotification({
+    recipient: post.postedBy,
+    sender: userId,
+    type: "like",
+    post: post._id,
+  });
+
   res.status(StatusCodes.OK).json({
     message: "Post liked successfully",
     likesCount: post.likedBy.length,
@@ -178,6 +188,12 @@ const unlikePost = asyncHandler(async (req, res) => {
   post.likedBy = post.likedBy.filter((user) => user.toString() !== userId);
 
   await post.save();
+  await Notification.deleteOne({
+    recipient: post.postedBy,
+    sender: userId,
+    type: "like",
+    post: post._id,
+  });
 
   res.status(StatusCodes.OK).json({
     message: "Post unliked successfully",
