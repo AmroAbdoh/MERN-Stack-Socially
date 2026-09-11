@@ -10,6 +10,7 @@ import userRoutes from "./routes/user.routes";
 import postRoutes from "./routes/post.routes";
 import commentRoutes from "./routes/comment.routes";
 import feedRoutes from "./routes/feed.routes";
+import searchRoutes from "./routes/search.routes";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api", commentRoutes);
 app.use("/api/feed", feedRoutes);
+app.use("/search", searchRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
