@@ -3,6 +3,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "node:path";
 import http from "http";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from "swagger-jsdoc";
 
 import { connectDB } from "./config/db";
 import { errorHandler } from "./middleware/error.middleware";
@@ -20,9 +24,34 @@ dotenv.config();
 
 const app = express();
 
+const swaggerSpec = swaggerJsdoc({
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Social Media Platform API",
+      version: "1.0.0",
+      description: "REST API for the social media platform backend.",
+    },
+  },
+  apis: [path.resolve(process.cwd(), "src/routes/**/*.ts")],
+});
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 150,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    message: "Too many requests, please try again later.",
+  },
+});
+
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use(apiLimiter);
 app.use("/uploads", express.static(path.resolve(process.cwd(), "uploads")));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);

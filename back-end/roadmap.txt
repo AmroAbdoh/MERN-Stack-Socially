@@ -41,12 +41,12 @@
    ├── Like notification 
    └── Comment notification
 
-8. Real-time   ← NEXT
+8. Real-time   
    ├── Socket.IO
    ├── Real-time notifications
    └── Messaging
 
-9. Final backend work
+9. Final backend work   ← NEXT
    ├── Validation
    ├── Error handling
    ├── Security
