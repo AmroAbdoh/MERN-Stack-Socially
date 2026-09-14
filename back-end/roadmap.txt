@@ -36,12 +36,12 @@
    ├── Search users
    └── Search posts
 
-7. Notifications     ← NEXT
+7. Notifications     
    ├── Follow notification
    ├── Like notification 
    └── Comment notification
 
-8. Real-time
+8. Real-time   ← NEXT
    ├── Socket.IO
    ├── Real-time notifications
    └── Messaging

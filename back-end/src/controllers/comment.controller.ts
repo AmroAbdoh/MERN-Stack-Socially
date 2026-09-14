@@ -118,15 +118,11 @@ const deleteComment = asyncHandler(async (req, res) => {
 
   const comment = await Comment.findById(id);
 
-  if (!comment) {
-    throw new NotFoundError("Comment not found");
-  }
+  if (!comment) throw new NotFoundError("Comment not found");
 
   const post = await Post.findById(comment.post);
 
-  if (!post) {
-    throw new NotFoundError("Post not found");
-  }
+  if (!post) throw new NotFoundError("Post not found");
 
   if (
     comment.postedBy.toString() !== userId &&

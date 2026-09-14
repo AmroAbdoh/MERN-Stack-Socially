@@ -172,9 +172,8 @@ const unfollowUser = asyncHandler(async (req, res) => {
 
   if (!targetUser) throw new UnauthenticatedError("user not found");
 
-  if (targetUser._id.toString() === userId) {
+  if (targetUser._id.toString() === userId)
     throw new BadRequestError("You cannot unfollow yourself");
-  }
 
   await Promise.all([
     User.updateOne({ _id: userId }, { $pull: { following: targetUser._id } }),

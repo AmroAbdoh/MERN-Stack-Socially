@@ -2,9 +2,11 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "node:path";
+import http from "http";
 
 import { connectDB } from "./config/db";
 import { errorHandler } from "./middleware/error.middleware";
+import { initSocket } from "./sockets";
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import postRoutes from "./routes/post.routes";
@@ -12,6 +14,7 @@ import commentRoutes from "./routes/comment.routes";
 import feedRoutes from "./routes/feed.routes";
 import searchRoutes from "./routes/search.routes";
 import notificationRoutes from "./routes/notification.routes";
+import messageRoutes from "./routes/message.routes";
 
 dotenv.config();
 
@@ -28,14 +31,19 @@ app.use("/api", commentRoutes);
 app.use("/api/feed", feedRoutes);
 app.use("/search", searchRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/messages", messageRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
+const server = http.createServer(app);
+
+initSocket(server);
+
 const startServer = async (): Promise<void> => {
   await connectDB();
 
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 };
