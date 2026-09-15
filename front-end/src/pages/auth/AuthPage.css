@@ -86,6 +86,80 @@
   margin-left: 4px;
 }
 
+.auth-back-button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.auth-back-button:hover:not(:disabled) {
+  color: var(--primary);
+}
+
+.auth-back-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.auth-step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: -8px 0 26px;
+}
+
+.auth-step-indicator span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.auth-step-indicator span.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.auth-step-indicator i {
+  width: 34px;
+  height: 1px;
+  background: var(--border);
+}
+
+.auth-security-question {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+
+.auth-security-question span {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.auth-security-question strong {
+  color: var(--text);
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
 @media (max-width: 520px) {
   .auth-row {
     align-items: flex-start;

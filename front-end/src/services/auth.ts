@@ -23,6 +23,14 @@ export type AuthResponse = {
   };
 };
 
+type ForgotPasswordResponse = {
+  securityQuestion: string;
+};
+
+type VerifySecurityAnswerResponse = {
+  resetToken: string;
+};
+
 const request = async <T>(path: string, body: unknown): Promise<T> => {
   const response = await fetch(`${API_URL}/auth${path}`, {
     method: "POST",
@@ -45,4 +53,28 @@ const loginUser = (credentials: Credentials): Promise<AuthResponse> =>
 const registerUser = (details: RegistrationDetails): Promise<AuthResponse> =>
   request<AuthResponse>("/register", details);
 
-export { loginUser, registerUser };
+const requestPasswordReset = (email: string): Promise<ForgotPasswordResponse> =>
+  request<ForgotPasswordResponse>("/forgot-password", { email });
+
+const verifySecurityAnswer = (
+  email: string,
+  securityAnswer: string,
+): Promise<VerifySecurityAnswerResponse> =>
+  request<VerifySecurityAnswerResponse>("/verify-security-answer", {
+    email,
+    securityAnswer,
+  });
+
+const resetPassword = (
+  token: string,
+  newPassword: string,
+): Promise<{ message: string }> =>
+  request<{ message: string }>("/reset-password", { token, newPassword });
+
+export {
+  loginUser,
+  registerUser,
+  requestPasswordReset,
+  verifySecurityAnswer,
+  resetPassword,
+};

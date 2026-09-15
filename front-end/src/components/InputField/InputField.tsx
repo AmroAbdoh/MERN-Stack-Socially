@@ -6,6 +6,7 @@ type InputProps = {
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
 };
 
 function InputField({
@@ -14,6 +15,7 @@ function InputField({
   name,
   value,
   onChange,
+  required = false,
 }: InputProps) {
   return (
     <div className="auth-field">
@@ -24,6 +26,7 @@ function InputField({
         type={type}
         value={value}
         onChange={onChange}
+        required={required}
       />
     </div>
   );

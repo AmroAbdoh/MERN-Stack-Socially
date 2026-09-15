@@ -10,18 +10,21 @@
   color: var(--text);
 }
 
-.auth-field input {
+.auth-field input,
+.auth-field select {
   width: 100%;
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: 12px;
   padding: 13px 14px;
+  color: var(--text);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
-.auth-field input:focus {
+.auth-field input:focus,
+.auth-field select:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 4px var(--focus-ring);
