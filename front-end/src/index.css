@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+
+:root {
+  color-scheme: light;
+  --bg: #fdf3ec;
+  --surface: #ffffff;
+  --surface-soft: #fbe8da;
+  --surface-strong: #f5d3b8;
+  --text: #450920;
+  --text-muted: #8a5068;
+  --border: #f0dbc9;
+
+  --primary: #a53860;
+  --primary-hover: #8a2c4e;
+  --accent: #da627d;
+  --accent-hover: #c14f68;
+  --online: #2e9e6a;
+  --danger: #c0392b;
+  --danger-hover: #a5301f;
+
+  --badge-online-bg: rgba(46, 158, 106, 0.12);
+  --badge-online-text: #1f7a52;
+  --badge-new-bg: #ffe1e6;
+  --badge-new-text: #b8365b;
+  --badge-verified-bg: rgba(165, 56, 96, 0.12);
+  --badge-verified-text: #a53860;
+
+  --primary-soft: #fbe8da;
+  --focus-ring: rgba(218, 98, 125, 0.2);
+  --overlay-start: rgba(69, 9, 32, 0.45);
+  --overlay-end: rgba(45, 6, 21, 0.68);
+  --on-primary: #ffffff;
+  --shadow-primary: rgba(165, 56, 96, 0.2);
+  --shadow-accent: rgba(218, 98, 125, 0.16);
+  --shadow-danger: rgba(192, 57, 43, 0.2);
+
+  /* Compatibility aliases for existing components. */
+  --green-50: var(--primary-soft);
+  --green-300: var(--accent);
+  --green-700: var(--primary);
+  --green-900: var(--text);
+  --white: var(--surface);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1c0f14;
+  --surface: #2a151d;
+  --surface-soft: #3a1c26;
+  --surface-strong: #200f16;
+  --text: #fdf1f4;
+  --text-muted: #d19bab;
+  --border: #4a2530;
+
+  --primary: #ff7a9c;
+  --primary-hover: #ff98b4;
+  --accent: #ffa8bc;
+  --accent-hover: #ffc2d1;
+  --online: #4ade80;
+  --danger: #f87171;
+  --danger-hover: #fca5a5;
+
+  --badge-online-bg: rgba(74, 222, 128, 0.16);
+  --badge-online-text: #86efac;
+  --badge-new-bg: rgba(255, 168, 188, 0.16);
+  --badge-new-text: #ffa8bc;
+  --badge-verified-bg: rgba(255, 122, 156, 0.18);
+  --badge-verified-text: #ff9db5;
+
+  --primary-soft: #3a1c26;
+  --focus-ring: rgba(255, 168, 188, 0.22);
+  --overlay-start: rgba(28, 15, 20, 0.55);
+  --overlay-end: rgba(16, 8, 11, 0.78);
+  --on-primary: #2a0f18;
+  --shadow-primary: rgba(255, 122, 156, 0.2);
+  --shadow-accent: rgba(255, 168, 188, 0.16);
+  --shadow-danger: rgba(248, 113, 113, 0.2);
+
+  --green-50: var(--primary-soft);
+  --green-300: var(--accent);
+  --green-700: var(--primary);
+  --green-900: var(--text);
+  --white: var(--surface);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.home-page {
+  display: grid;
+  min-height: 100vh;
+  place-content: center;
+  padding: 32px;
+  background:
+    radial-gradient(circle at 15% 20%, var(--surface-soft), transparent 32%),
+    var(--bg);
+  color: var(--text);
+  text-align: center;
+}
+
+.home-page h1 {
+  max-width: 680px;
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(2.4rem, 7vw, 5.5rem);
+  line-height: 0.98;
+}
+
+.home-page > p:last-child {
+  margin: 20px 0 0;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+.home-eyebrow {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}

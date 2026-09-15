@@ -1,5 +1,13 @@
+import { BrowserRouter } from "react-router-dom";
+
+import AppRouter from "./router/AppRouter";
+
 function App() {
-  return <h1>Social Media Project</h1>;
+  return (
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
+  );
 }
 
 export default App;

@@ -1,0 +1,143 @@
+.auth-page-shell {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+}
+
+.auth-card {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--white);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  overflow: hidden;
+}
+
+.auth-visual {
+  position: relative;
+  isolation: isolate;
+  background: radial-gradient(
+    circle at 50% 42%,
+    var(--primary) 0,
+    var(--primary-hover) 52%,
+    var(--text) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  overflow: hidden;
+}
+
+.auth-visual::before,
+.auth-visual::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border: 1px solid color-mix(in srgb, var(--on-primary) 24%, transparent);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.auth-visual::before {
+  width: min(70vw, 520px);
+  aspect-ratio: 1;
+  box-shadow:
+    0 0 0 34px color-mix(in srgb, var(--on-primary) 6%, transparent),
+    0 0 0 68px color-mix(in srgb, var(--on-primary) 4%, transparent);
+}
+
+.auth-visual::after {
+  width: min(34vw, 260px);
+  aspect-ratio: 1;
+  background: color-mix(in srgb, var(--on-primary) 5%, transparent);
+}
+
+.auth-visual-content {
+  position: relative;
+  z-index: 1;
+  color: var(--on-primary);
+  max-width: 420px;
+  text-align: center;
+}
+
+.auth-logo-wrap {
+  display: grid;
+  width: 124px;
+  height: 124px;
+  place-items: center;
+  margin: 0 auto 18px;
+  border: 1px solid color-mix(in srgb, var(--on-primary) 42%, transparent);
+  border-radius: 36px;
+  background: color-mix(in srgb, var(--on-primary) 12%, transparent);
+  box-shadow: 0 20px 42px color-mix(in srgb, var(--text) 28%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.auth-logo-wrap img {
+  width: 94px;
+  height: 94px;
+  object-fit: contain;
+}
+
+.auth-brand-name {
+  margin: 0;
+  color: var(--on-primary);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.auth-visual-content h1 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(2rem, 3vw, 3.1rem);
+  line-height: 1.1;
+  margin: 24px 0 12px;
+}
+
+.auth-visual-content p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--on-primary) 88%, transparent);
+}
+
+.auth-visual-content .auth-eyebrow {
+  margin: 12px 0 0;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.auth-panel {
+  background: #f9fdf9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 42px;
+}
+
+.auth-box {
+  width: 100%;
+  max-width: 430px;
+}
+
+@media (max-width: 900px) {
+  .auth-card {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-visual {
+    min-height: 420px;
+    padding: 36px 24px;
+  }
+
+  .auth-panel {
+    padding: 32px 20px 40px;
+  }
+}
