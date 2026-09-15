@@ -1,0 +1,102 @@
+.profile-container {
+  display: grid;
+  min-height: calc(100vh - 72px);
+  place-items: center;
+  padding: 48px 20px;
+  background:
+    radial-gradient(circle at 15% 15%, var(--surface-soft), transparent 34%),
+    var(--bg);
+}
+
+.profile-card {
+  display: flex;
+  width: min(100%, 520px);
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  padding: 54px 40px 42px;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  background: var(--surface);
+  box-shadow: 0 24px 60px var(--shadow-primary);
+  text-align: center;
+}
+
+.profile-icon-wrapper {
+  display: grid;
+  width: 112px;
+  height: 112px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 34px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow: 0 16px 34px var(--shadow-primary);
+}
+
+.profile-icon {
+  width: 62px;
+  height: 62px;
+  fill: var(--on-primary);
+}
+
+.profile-info {
+  width: 100%;
+}
+
+.profile-name {
+  margin: 0 0 8px;
+  color: var(--text);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.8rem, 5vw, 2.35rem);
+  line-height: 1.1;
+}
+
+.profile-email {
+  margin: 0 0 16px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.profile-role {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 7px 15px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.profile-role.role-admin {
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
+  background: var(--badge-new-bg);
+  color: var(--badge-new-text);
+}
+
+.profile-role.role-member {
+  border-color: color-mix(in srgb, var(--online) 42%, var(--border));
+  background: var(--badge-online-bg);
+  color: var(--badge-online-text);
+}
+
+.profile-actions {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 6px;
+}
+
+@media (max-width: 600px) {
+  .profile-container {
+    min-height: calc(100vh - 128px);
+    padding: 28px 16px;
+  }
+
+  .profile-card {
+    padding: 42px 24px 32px;
+  }
+}

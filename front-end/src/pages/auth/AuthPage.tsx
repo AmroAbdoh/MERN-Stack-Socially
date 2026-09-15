@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import AuthLayout from "../../layout/AuthLayout/AuthLayout";
 import AuthInput from "../../components/InputField/InputField";
-import PrimaryButton from "../../components/auth/Button";
+import PrimaryButton from "../../components/Button/Button";
 import { loginUser, registerUser } from "../../services/auth";
 
 import "./AuthPage.css";

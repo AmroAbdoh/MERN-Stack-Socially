@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AuthInput from "../../components/InputField/InputField";
-import PrimaryButton from "../../components/auth/Button";
+import PrimaryButton from "../../components/Button/Button";
 import PasswordRequirements from "../../components/PasswordRequirements/PasswordRequirements";
 import AuthLayout from "../../layout/AuthLayout/AuthLayout";
 import {
