@@ -10,6 +10,10 @@
   color: var(--text);
 }
 
+.auth-input-wrap {
+  position: relative;
+}
+
 .auth-field input,
 .auth-field select {
   width: 100%;
@@ -23,9 +27,44 @@
     box-shadow 0.2s ease;
 }
 
+.auth-input-wrap input {
+  padding-right: 68px;
+}
+
 .auth-field input:focus,
 .auth-field select:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  border: 0;
+  padding: 4px;
+  transform: translateY(-50%);
+  background: transparent;
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.password-toggle:hover {
+  color: var(--primary-hover);
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+input:autofill {
+  /* Replace 'white' with your desired background color */
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+
+  /* Replace 'black' with your desired text color */
+  -webkit-text-fill-color: black !important;
 }

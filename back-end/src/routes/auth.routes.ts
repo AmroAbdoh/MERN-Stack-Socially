@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import {
   register,
+  checkRegistrationAvailability,
   login,
   forgotPassword,
   verifySecurityAnswer,
@@ -11,6 +12,7 @@ import {
 const router = Router();
 
 router.post("/register", register);
+router.post("/check-availability", checkRegistrationAvailability);
 router.post("/login", login);
 router.post("/forgot-password", forgotPassword);
 router.post("/verify-security-answer", verifySecurityAnswer);

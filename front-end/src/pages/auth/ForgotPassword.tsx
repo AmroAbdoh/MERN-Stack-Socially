@@ -126,6 +126,7 @@ function ForgotPassword() {
               value={newPassword}
               onChange={(event) => setNewPassword(event.target.value)}
               required
+              showPasswordToggle
             />
             <PasswordRequirements password={newPassword} />
           </>

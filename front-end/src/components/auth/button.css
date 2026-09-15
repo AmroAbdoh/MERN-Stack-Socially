@@ -60,7 +60,9 @@
 .secondary-btn:disabled,
 .primary-btn:disabled,
 .danger-btn:disabled {
-  opacity: 0.6;
+  background: var(--disabled-bg);
+  color: var(--disabled-text);
+  box-shadow: none;
   cursor: not-allowed;
   transform: none;
 }

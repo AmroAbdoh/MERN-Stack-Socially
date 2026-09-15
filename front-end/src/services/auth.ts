@@ -53,6 +53,12 @@ const loginUser = (credentials: Credentials): Promise<AuthResponse> =>
 const registerUser = (details: RegistrationDetails): Promise<AuthResponse> =>
   request<AuthResponse>("/register", details);
 
+const checkRegistrationAvailability = (
+  email: string,
+  username: string,
+): Promise<{ available: true }> =>
+  request<{ available: true }>("/check-availability", { email, username });
+
 const requestPasswordReset = (email: string): Promise<ForgotPasswordResponse> =>
   request<ForgotPasswordResponse>("/forgot-password", { email });
 
@@ -74,6 +80,7 @@ const resetPassword = (
 export {
   loginUser,
   registerUser,
+  checkRegistrationAvailability,
   requestPasswordReset,
   verifySecurityAnswer,
   resetPassword,

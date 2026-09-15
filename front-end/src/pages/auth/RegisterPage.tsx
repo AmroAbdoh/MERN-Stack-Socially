@@ -5,7 +5,11 @@ import AuthLayout from "../../layout/AuthLayout/AuthLayout";
 import AuthInput from "../../components/InputField/InputField";
 import PrimaryButton from "../../components/auth/Button";
 import PasswordRequirements from "../../components/PasswordRequirements/PasswordRequirements";
-import { registerUser } from "../../services/auth";
+import {
+  checkRegistrationAvailability,
+  registerUser,
+} from "../../services/auth";
+import { isStrongPassword } from "../../components/PasswordRequirements/PasswordRequirements";
 
 import "./AuthPage.css";
 
@@ -30,20 +34,84 @@ function RegisterPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [touchedFields, setTouchedFields] = useState<Record<string, boolean>>(
+    {},
+  );
+  const [availabilityError, setAvailabilityError] = useState<
+    "email" | "username" | null
+  >(null);
+
+  const isStepOneValid =
+    formData.name.trim().length > 0 &&
+    /^[a-zA-Z0-9_.]{3,30}$/.test(formData.username.trim()) &&
+    /^\S+@\S+\.\S+$/.test(formData.email.trim()) &&
+    isStrongPassword(formData.password);
+
+  const isStepTwoValid = formData.securityAnswer.trim().length > 0;
+
+  const fieldError = (field: "name" | "username" | "email"): string => {
+    if (!touchedFields[field]) return "";
+
+    if (!formData[field].trim()) {
+      return `${field[0].toUpperCase()}${field.slice(1)} is required.`;
+    }
+
+    if (
+      field === "username" &&
+      !/^[a-zA-Z0-9_.]{3,30}$/.test(formData.username.trim())
+    ) {
+      return "Username must be 3-30 characters and use only letters, numbers, _ or .";
+    }
+
+    if (field === "email" && !/^\S+@\S+\.\S+$/.test(formData.email.trim())) {
+      return "Enter a valid email address.";
+    }
+
+    return "";
+  };
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = event.target;
     setFormData((current) => ({ ...current, [name]: value }));
+    setTouchedFields((current) => ({ ...current, [name]: true }));
+
+    if (name === "email" || name === "username") {
+      setAvailabilityError(null);
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (step === 1) {
-      setStep(2);
       setErrorMessage("");
+      setIsSubmitting(true);
+
+      try {
+        await checkRegistrationAvailability(
+          formData.email.trim(),
+          formData.username.trim(),
+        );
+        setStep(2);
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Could not validate your account details.";
+
+        if (message.toLowerCase().includes("email")) {
+          setAvailabilityError("email");
+        } else if (message.toLowerCase().includes("username")) {
+          setAvailabilityError("username");
+        } else {
+          setErrorMessage(message);
+        }
+      } finally {
+        setIsSubmitting(false);
+      }
+
       return;
     }
 
@@ -94,6 +162,9 @@ function RegisterPage() {
               onChange={handleChange}
               required
             />
+            {fieldError("name") && (
+              <p className="auth-field-error">{fieldError("name")}</p>
+            )}
             <AuthInput
               label="Username"
               type="text"
@@ -102,6 +173,14 @@ function RegisterPage() {
               onChange={handleChange}
               required
             />
+            {fieldError("username") && (
+              <p className="auth-field-error">{fieldError("username")}</p>
+            )}
+            {availabilityError === "username" && (
+              <p className="auth-field-error">
+                This username is already in use.
+              </p>
+            )}
             <AuthInput
               label="Email"
               type="email"
@@ -110,6 +189,12 @@ function RegisterPage() {
               onChange={handleChange}
               required
             />
+            {fieldError("email") && (
+              <p className="auth-field-error">{fieldError("email")}</p>
+            )}
+            {availabilityError === "email" && (
+              <p className="auth-field-error">This email is already in use.</p>
+            )}
             <AuthInput
               label="Password"
               type="password"
@@ -117,10 +202,15 @@ function RegisterPage() {
               value={formData.password}
               onChange={handleChange}
               required
+              showPasswordToggle
             />
             <PasswordRequirements password={formData.password} />
 
-            <PrimaryButton type="submit" label="Continue" />
+            <PrimaryButton
+              type="submit"
+              disabled={!isStepOneValid || isSubmitting}
+              label={isSubmitting ? "Checking..." : "Continue"}
+            />
           </>
         ) : (
           <>
@@ -154,7 +244,7 @@ function RegisterPage() {
 
             <PrimaryButton
               type="submit"
-              disabled={isSubmitting}
+              disabled={!isStepTwoValid || isSubmitting}
               label={isSubmitting ? "Creating..." : "Create account"}
             />
 

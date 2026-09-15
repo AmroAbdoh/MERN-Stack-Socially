@@ -39,6 +39,29 @@ const register = asyncHandler(async (req, res) => {
   });
 });
 
+const checkRegistrationAvailability = asyncHandler(async (req, res) => {
+  const email = (req.body.email || "").trim().toLowerCase();
+  const username = (req.body.username || "").trim().toLowerCase();
+
+  if (!email || !username) {
+    throw new BadRequestError("Email and username are required");
+  }
+
+  const existingUser = await User.findOne({
+    $or: [{ email }, { username }],
+  }).select("email username");
+
+  if (existingUser?.email === email) {
+    throw new BadRequestError("This email is already in use");
+  }
+
+  if (existingUser?.username === username) {
+    throw new BadRequestError("This username is already in use");
+  }
+
+  res.status(StatusCodes.OK).json({ available: true });
+});
+
 const login = asyncHandler(async (req, res) => {
   const email = (req.body.email || "").trim().toLowerCase();
   const password = (req.body.password || "").trim();
@@ -142,4 +165,11 @@ const resetPassword = asyncHandler(async (req, res) => {
   });
 });
 
-export { register, login, forgotPassword, verifySecurityAnswer, resetPassword };
+export {
+  register,
+  checkRegistrationAvailability,
+  login,
+  forgotPassword,
+  verifySecurityAnswer,
+  resetPassword,
+};

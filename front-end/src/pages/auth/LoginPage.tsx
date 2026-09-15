@@ -63,6 +63,7 @@ function LoginPage() {
           name="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
+          showPasswordToggle
         />
 
         <div className="auth-row">

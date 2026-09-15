@@ -75,6 +75,13 @@
   line-height: 1.45;
 }
 
+.auth-field-error {
+  margin: -12px 0 0;
+  color: var(--danger);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
 .auth-footer {
   margin: 2px 0 0;
   color: var(--text-muted);

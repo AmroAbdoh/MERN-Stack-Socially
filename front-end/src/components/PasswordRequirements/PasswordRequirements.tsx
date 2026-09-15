@@ -32,6 +32,9 @@ const PASSWORD_RULES: PasswordRule[] = [
   },
 ];
 
+export const isStrongPassword = (password: string): boolean =>
+  PASSWORD_RULES.every((rule) => rule.isValid(password));
+
 function PasswordRequirements({ password }: PasswordRequirementsProps) {
   const remainingRules = PASSWORD_RULES.filter(
     (rule) => !rule.isValid(password),
