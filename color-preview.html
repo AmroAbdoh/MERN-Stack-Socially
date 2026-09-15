@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Palette Preview</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #fdf3ec;
+      --surface: #ffffff;
+      --surface-soft: #fbe8da;
+      --surface-strong: #f5d3b8;
+      --text: #450920;
+      --text-muted: #8a5068;
+      --border: #f0dbc9;
+
+      --primary: #a53860;
+      --primary-hover: #8a2c4e;
+      --accent: #da627d;
+      --accent-hover: #c14f68;
+      --online: #2e9e6a;
+      --danger: #c0392b;
+      --danger-hover: #a5301f;
+
+      --badge-online-bg: rgba(46, 158, 106, 0.12);
+      --badge-online-text: #1f7a52;
+      --badge-new-bg: #ffe1e6;
+      --badge-new-text: #b8365b;
+      --badge-verified-bg: rgba(165, 56, 96, 0.12);
+      --badge-verified-text: #a53860;
+
+      --pill-following-bg: #fbe8da;
+      --pill-following-text: #450920;
+      --pill-suggested-bg: #ffeef1;
+      --pill-suggested-text: #da627d;
+      --pill-blocked-bg: #fdecea;
+      --pill-blocked-text: #a5301f;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #1c0f14;
+      --surface: #2a151d;
+      --surface-soft: #3a1c26;
+      --surface-strong: #200f16;
+      --text: #fdf1f4;
+      --text-muted: #d19bab;
+      --border: #4a2530;
+
+      --primary: #ff7a9c;
+      --primary-hover: #ff98b4;
+      --accent: #ffa8bc;
+      --accent-hover: #ffc2d1;
+      --online: #4ade80;
+      --danger: #f87171;
+      --danger-hover: #fca5a5;
+
+      --badge-online-bg: rgba(74, 222, 128, 0.16);
+      --badge-online-text: #86efac;
+      --badge-new-bg: rgba(255, 168, 188, 0.16);
+      --badge-new-text: #ffa8bc;
+      --badge-verified-bg: rgba(255, 122, 156, 0.18);
+      --badge-verified-text: #ff9db5;
+
+      --pill-following-bg: #3a1c26;
+      --pill-following-text: #fdf1f4;
+      --pill-suggested-bg: rgba(255, 168, 188, 0.14);
+      --pill-suggested-text: #ffa8bc;
+      --pill-blocked-bg: rgba(248, 113, 113, 0.16);
+      --pill-blocked-text: #fca5a5;
+    }
+
+    html[data-theme="dark"] .button-primary { background: var(--primary); color: #2a0f18; }
+    html[data-theme="dark"] .button-primary:hover { background: var(--primary-hover); color: #2a0f18; }
+    html[data-theme="dark"] .button-accent { color: #2a0f18; }
+    html[data-theme="dark"] .button-accent:hover { color: #2a0f18; }
+    html[data-theme="dark"] .button-danger { color: #2a0f18; }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .page { min-height: 100vh; padding: 40px 24px; }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .topbar h1 { margin: 0; font-size: 1.75rem; line-height: 1.2; }
+    .topbar p { margin: 8px 0 0; max-width: 640px; color: var(--text-muted); }
+
+    .toggle {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+
+    .frame {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 24px 60px rgba(69, 9, 32, 0.08);
+    }
+
+    .frame h2 { margin: 0 0 12px; font-size: 1.15rem; }
+    .frame p { margin: 0 0 18px; color: var(--text-muted); }
+
+    .swatches { display: grid; gap: 14px; }
+
+    .swatch {
+      display: grid;
+      grid-template-columns: 96px 1fr 96px;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+    }
+
+    .swatch-chip {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .swatch-title { font-weight: 700; }
+    .swatch-label { color: var(--text-muted); font-size: 0.92rem; }
+    .swatch-value { text-align: right; font-family: monospace; color: var(--text-muted); }
+
+    .preview-panel { display: grid; gap: 18px; margin-top: 24px; }
+
+    .card {
+      border-radius: 20px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      padding: 20px;
+    }
+
+    .card-title { margin: 0 0 6px; font-weight: 700; }
+    .card-text { color: var(--text-muted); margin: 0 0 18px; }
+
+    .button-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 150ms ease, color 150ms ease;
+    }
+
+    .button-primary { background: var(--primary); color: white; }
+    .button-primary:hover { background: var(--primary-hover); color: white; }
+
+    .button-accent { background: var(--accent); color: white; }
+    .button-accent:hover { background: var(--accent-hover); color: white; }
+
+    .button-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .button-outline:hover { background: var(--surface-strong); }
+
+    .button-danger { background: var(--danger); color: white; }
+    .button-danger:hover { background: var(--danger-hover); color: white; }
+
+    .badge-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .badge-online { background: var(--badge-online-bg); color: var(--badge-online-text); }
+    .badge-new { background: var(--badge-new-bg); color: var(--badge-new-text); }
+    .badge-verified { background: var(--badge-verified-bg); color: var(--badge-verified-text); }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .examples { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+    }
+
+    .pill-following { background: var(--pill-following-bg); color: var(--pill-following-text); }
+    .pill-suggested { background: var(--pill-suggested-bg); color: var(--pill-suggested-text); }
+    .pill-blocked { background: var(--pill-blocked-bg); color: var(--pill-blocked-text); }
+
+    /* mini post card */
+    .post-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      max-width: 420px;
+    }
+
+    .post-head { display: flex; align-items: center; gap: 12px; }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .post-names { flex: 1; }
+    .post-name { font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .post-handle { color: var(--text-muted); font-size: 0.88rem; }
+
+    .post-follow {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      border-radius: 999px;
+    }
+
+    .post-text { color: var(--text); margin: 0; line-height: 1.5; }
+
+    .post-actions {
+      display: flex;
+      gap: 20px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .post-actions span { display: flex; align-items: center; gap: 6px; }
+    .post-actions .liked { color: var(--accent); font-weight: 700; }
+
+    .verified-check {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--badge-verified-text);
+      color: var(--surface);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <div class="topbar">
+      <div>
+        <h1>Social Palette Preview</h1>
+        <p>Light and dark palettes built from your brand colors. Use the toggle to check contrast and confirm the
+          dark-mode background.</p>
+      </div>
+      <button id="toggle" class="toggle">Switch to dark mode</button>
+    </div>
+
+    <div class="grid">
+      <section class="frame">
+        <h2>Palette values</h2>
+        <p>Base tokens shared across the app.</p>
+        <div class="swatches">
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--bg);"></div>
+            <div><div class="swatch-title">Background</div><div class="swatch-label">App background</div></div>
+            <div class="swatch-value" data-token="--bg"></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--surface);"></div>
+            <div><div class="swatch-title">Surface</div><div class="swatch-label">Cards, posts, modals</div></div>
+            <div class="swatch-value" data-token="--surface"></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--surface-soft);"></div>
+            <div><div class="swatch-title">Soft surface</div><div class="swatch-label">Hover, secondary panels</div></div>
+            <div class="swatch-value" data-token="--surface-soft"></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--text);"></div>
+            <div><div class="swatch-title">Text</div><div class="swatch-label">Primary body text</div></div>
+            <div class="swatch-value" data-token="--text"></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--text-muted);"></div>
+            <div><div class="swatch-title">Muted text</div><div class="swatch-label">Handles, timestamps</div></div>
+            <div class="swatch-value" data-token="--text-muted"></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--border);"></div>
+            <div><div class="swatch-title">Border</div><div class="swatch-label">Dividers, card outlines</div></div>
+            <div class="swatch-value" data-token="--border"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="frame">
+        <h2>Brand & status colors</h2>
+        <p>Use these consistently for actions and states across the app.</p>
+        <div class="swatches">
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--primary);"></div>
+            <div><div class="swatch-title">Primary</div><div class="swatch-label">Follow, post, main CTA</div></div>
+            <div class="swatch-value" data-token="--primary"></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--primary-hover);"></div>
+            <div><div class="swatch-title">Primary hover</div><div class="swatch-label">Hover state for CTA</div></div>
+            <div class="swatch-value" data-token="--primary-hover"></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--accent);"></div>
+            <div><div class="swatch-title">Accent</div><div class="swatch-label">Likes, highlights, links</div></div>
+            <div class="swatch-value" data-token="--accent"></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--accent-hover);"></div>
+            <div><div class="swatch-title">Accent hover</div><div class="swatch-label">Hover state for accent</div></div>
+            <div class="swatch-value" data-token="--accent-hover"></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--online);"></div>
+            <div><div class="swatch-title">Online</div><div class="swatch-label">Active, live, connected</div></div>
+            <div class="swatch-value" data-token="--online"></div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-chip" style="background: var(--danger);"></div>
+            <div><div class="swatch-title">Danger</div><div class="swatch-label">Report, block, delete</div></div>
+            <div class="swatch-value" data-token="--danger"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="frame preview-panel">
+      <div class="card">
+        <p class="card-title">Preview components</p>
+        <div class="button-row">
+          <button class="button button-primary">Follow</button>
+          <button class="button button-outline">Message</button>
+          <button class="button button-accent">Like</button>
+          <button class="button button-danger">Report</button>
+        </div>
+        <div class="badge-row" style="margin-top: 16px;">
+          <span class="badge badge-online"><span class="dot"></span>Online</span>
+          <span class="badge badge-new">New</span>
+          <span class="badge badge-verified">Verified</span>
+        </div>
+        <div class="examples" style="margin-top: 20px;">
+          <span class="pill pill-following">Following</span>
+          <span class="pill pill-suggested">Suggested for you</span>
+          <span class="pill pill-blocked">Blocked</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="card-title">In context: a post</p>
+        <div class="post-card">
+          <div class="post-head">
+            <div class="avatar">M</div>
+            <div class="post-names">
+              <div class="post-name">Maya Reyes <span class="verified-check">✓</span></div>
+              <div class="post-handle">@mayareyes · 2h</div>
+            </div>
+            <button class="button button-primary post-follow">Follow</button>
+          </div>
+          <p class="post-text">Redid my whole workspace this weekend — finally a desk setup I actually enjoy sitting at.</p>
+          <div class="post-actions">
+            <span class="liked">♥ 128</span>
+            <span>💬 14</span>
+            <span>↗ Share</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const toggle = document.getElementById('toggle');
+    const root = document.documentElement;
+    const swatchEntries = document.querySelectorAll('.swatch-value[data-token]');
+
+    const updateLabel = () => {
+      const isDark = root.dataset.theme === 'dark';
+      toggle.textContent = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+    };
+
+    const updateSwatchValues = () => {
+      swatchEntries.forEach((entry) => {
+        const token = entry.dataset.token;
+        const rawValue = getComputedStyle(root).getPropertyValue(token).trim();
+        entry.textContent = rawValue || 'unknown';
+      });
+    };
+
+    toggle.addEventListener('click', () => {
+      if (root.dataset.theme === 'dark') {
+        delete root.dataset.theme;
+      } else {
+        root.dataset.theme = 'dark';
+      }
+      updateLabel();
+      updateSwatchValues();
+    });
+
+    updateLabel();
+    updateSwatchValues();
+  </script>
+</body>
+
+</html>
