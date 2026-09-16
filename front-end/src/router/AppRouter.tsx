@@ -4,15 +4,14 @@ import LoginPage from "../pages/auth/LoginPage";
 import RegisterPage from "../pages/auth/RegisterPage";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import Profile from "../pages/Profile/Profile";
-import AuthResetPassword from "../pages/auth/AuthenticatedResetPassword"
-import Navbar from "../components/Navbar/Navbar";
+import AuthResetPassword from "../pages/auth/AuthenticatedResetPassword";
+import AppLayout from "../layout/AppLayout/AppLayout";
 
 function HomePage() {
   const userName = localStorage.getItem("userName") || "there";
 
   return (
     <>
-      <Navbar />
       <main className="home-page">
         <p className="home-eyebrow">Socially</p>
         <h1>Welcome back, {userName}.</h1>
@@ -28,9 +27,11 @@ function AppRouter() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/auth-reset-password" element={<AuthResetPassword />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/" element={<HomePage />} />
+      <Route element={<AppLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/auth-reset-password" element={<AuthResetPassword />} />
+      </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
