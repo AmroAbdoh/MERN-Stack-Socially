@@ -46,6 +46,20 @@ const getPosts = asyncHandler(async (req, res) => {
   });
 });
 
+const getMyPosts = asyncHandler(async (req, res) => {
+  const userId = req.user?.userId;
+
+  if (!userId) throw new UnauthenticatedError("Authentication invalid");
+
+  const posts = await Post.find({ postedBy: userId })
+    .populate("postedBy", "name username avatar")
+    .sort({ createdAt: -1 });
+
+  res.status(StatusCodes.OK).json({
+    posts,
+  });
+});
+
 const getPost = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const userId = req.user?.userId;
@@ -204,6 +218,7 @@ const unlikePost = asyncHandler(async (req, res) => {
 export {
   createPost,
   getPosts,
+  getMyPosts,
   getPost,
   updatePost,
   deletePost,

@@ -1,0 +1,47 @@
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+export type ProfileUser = {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  avatar?: string;
+  bio?: string;
+  followers: string[];
+  following: string[];
+  role: "user" | "admin";
+};
+
+export type ProfilePost = {
+  _id: string;
+  description: string;
+  photos: string[];
+  likedBy: string[];
+  visibility: "public" | "private";
+  createdAt: string;
+};
+
+const authenticatedRequest = async <T>(path: string): Promise<T> => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${API_URL}${path}`, {
+    headers: {
+      Authorization: `Bearer ${token || ""}`,
+    },
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.message || "Unable to load profile data");
+  }
+
+  return data as T;
+};
+
+const getCurrentProfile = (): Promise<{ user: ProfileUser }> =>
+  authenticatedRequest<{ user: ProfileUser }>("/users/me");
+
+const getMyPosts = (): Promise<{ posts: ProfilePost[] }> =>
+  authenticatedRequest<{ posts: ProfilePost[] }>("/posts/me");
+
+export { getCurrentProfile, getMyPosts };

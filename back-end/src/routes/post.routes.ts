@@ -3,6 +3,7 @@ import { Router } from "express";
 import {
   createPost,
   getPosts,
+  getMyPosts,
   getPost,
   updatePost,
   deletePost,
@@ -14,6 +15,7 @@ import { authenticateUser } from "../middleware/auth.middleware";
 const router = Router();
 
 router.get("/", getPosts);
+router.get("/me", authenticateUser, getMyPosts);
 router.get("/:id", authenticateUser, getPost);
 router.post("/", authenticateUser, createPost);
 router.patch("/:id", authenticateUser, updatePost);
