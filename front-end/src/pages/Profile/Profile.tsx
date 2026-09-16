@@ -44,6 +44,12 @@ function Profile() {
 
           <div className="profile-actions">
             <PrimaryButton
+              label="Edit Profile"
+              type="button"
+              variant="primary"
+            //   onClick={}
+            />
+            <PrimaryButton
               label="Reset password"
               type="button"
               variant="secondary"

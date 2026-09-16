@@ -1,0 +1,49 @@
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: var(--surface-soft);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--primary);
+}
+
+.theme-toggle__icon {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  color: var(--accent);
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.theme-toggle__label {
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+@media (max-width: 420px) {
+  .theme-toggle {
+    width: 42px;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .theme-toggle__label {
+    display: none;
+  }
+}

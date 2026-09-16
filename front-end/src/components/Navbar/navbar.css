@@ -30,10 +30,9 @@
   cursor: pointer;
 }
 
-.navbar__brand img {
+.navbar__brand-logo {
   width: 34px;
   height: 34px;
-  object-fit: contain;
 }
 
 .navbar__brand:hover {
