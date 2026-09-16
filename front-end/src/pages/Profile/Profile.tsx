@@ -6,11 +6,20 @@ import "./profile.css";
 function Profile() {
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName") || "User";
-  const userRole = localStorage.getItem("userRole") || "user";
   const userEmail = localStorage.getItem("userEmail") || "user@example.com";
 
   const handleChangePassword = () => {
-    navigate("/forgot-password");
+    navigate("/auth-reset-password");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("userEmail");
+
+    navigate("/login", { replace: true });
+    window.location.reload();
   };
 
   return (
@@ -31,7 +40,6 @@ function Profile() {
           <div className="profile-info">
             <h1 className="profile-name">{userName}</h1>
             <p className="profile-email">{userEmail}</p>
-            
           </div>
 
           <div className="profile-actions">
@@ -40,6 +48,12 @@ function Profile() {
               type="button"
               variant="secondary"
               onClick={handleChangePassword}
+            />
+            <PrimaryButton
+              label="Logout"
+              type="button"
+              variant="danger"
+              onClick={handleLogout}
             />
           </div>
         </div>
