@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import PrimaryButton from "../../components/Button/Button";
+import EditProfile from "./EditProfile";
 import CardLayout from "../../layout/CardLayout/CardLayout";
 import {
   getCurrentProfile,
@@ -11,7 +12,7 @@ import {
 } from "../../services/profile";
 import "./profile.css";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+import { getAssetUrl } from "../../services/profile";
 
 function Profile() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ function Profile() {
   const [posts, setPosts] = useState<ProfilePost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -63,7 +65,7 @@ function Profile() {
             <div className="profile-avatar">
               {user.avatar ? (
                 <img
-                  src={`${API_URL.replace("/api", "")}${user.avatar}`}
+                  src={`${getAssetUrl(user.avatar)}?v=${encodeURIComponent(user.avatar)}`}
                   alt={`${user.name}'s avatar`}
                 />
               ) : (
@@ -96,6 +98,7 @@ function Profile() {
                 label="Edit Profile"
                 type="button"
                 variant="primary"
+                onClick={() => setIsEditModalOpen(true)}
               />
               <PrimaryButton
                 label="Reset password"
@@ -148,6 +151,13 @@ function Profile() {
               </div>
             )}
           </section>
+          {isEditModalOpen && (
+            <EditProfile
+              user={user}
+              onClose={() => setIsEditModalOpen(false)}
+              onSaved={setUser}
+            />
+          )}
         </CardLayout>
       )}
     </main>

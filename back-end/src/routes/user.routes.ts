@@ -5,6 +5,7 @@ import {
   getUserByUsername,
   updateProfile,
   updateAvatar,
+  removeAvatar,
   followUser,
   unfollowUser,
 } from "../controllers/user.controllers";
@@ -22,6 +23,7 @@ router.patch(
   uploadAvatar.single("avatar"),
   updateAvatar,
 );
+router.delete("/me/avatar", authenticateUser, removeAvatar);
 router.post("/:username/follow", authenticateUser, followUser);
 router.delete("/:username/follow", authenticateUser, unfollowUser);
 

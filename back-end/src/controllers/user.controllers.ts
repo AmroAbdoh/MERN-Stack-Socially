@@ -1,4 +1,6 @@
 import { StatusCodes } from "http-status-codes";
+import path from "node:path";
+import { unlink } from "node:fs/promises";
 import { BadRequestError, UnauthenticatedError } from "../errors";
 import Notification from "../models/notification.model";
 import User from "../models/user.model";
@@ -119,6 +121,32 @@ const updateAvatar = asyncHandler(async (req, res) => {
   });
 });
 
+const removeAvatar = asyncHandler(async (req, res) => {
+  const userId = req.user?.userId;
+
+  if (!userId) throw new UnauthenticatedError("Authentication Invalid");
+
+  const user = await User.findById(userId);
+
+  if (!user) throw new UnauthenticatedError("user not found");
+
+  if (user.avatar) {
+    const avatarPath = path.resolve(
+      process.cwd(),
+      user.avatar.replace(/^\//, ""),
+    );
+    await unlink(avatarPath).catch(() => undefined);
+  }
+
+  user.avatar = "";
+  await user.save();
+
+  res.status(StatusCodes.OK).json({
+    message: "Avatar removed successfully",
+    avatar: "",
+  });
+});
+
 const followUser = asyncHandler(async (req, res) => {
   const userId = req.user?.userId;
   const { username } = req.params;
@@ -196,6 +224,7 @@ export {
   getUserByUsername,
   updateProfile,
   updateAvatar,
+  removeAvatar,
   followUser,
   unfollowUser,
 };
