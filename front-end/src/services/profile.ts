@@ -28,9 +28,17 @@ export type ProfilePost = {
   _id: string;
   description: string;
   photos: string[];
-  likedBy: string[];
+  likedBy: Array<string | ProfileConnection>;
+  postedBy?: ProfileConnection;
   visibility: "public" | "private";
   createdAt: string;
+};
+
+export type PostComment = {
+  _id: string;
+  text: string;
+  createdAt: string;
+  postedBy?: ProfileConnection | string;
 };
 
 export type ProfileConnection = Pick<
@@ -38,10 +46,15 @@ export type ProfileConnection = Pick<
   "id" | "name" | "username" | "avatar" | "bio"
 >;
 
-const authenticatedRequest = async <T>(path: string): Promise<T> => {
+const authenticatedRequest = async <T>(
+  path: string,
+  requestInit: RequestInit = {},
+): Promise<T> => {
   const token = localStorage.getItem("token");
   const response = await fetch(`${API_URL}${path}`, {
+    ...requestInit,
     headers: {
+      ...requestInit.headers,
       Authorization: `Bearer ${token || ""}`,
     },
   });
@@ -73,6 +86,9 @@ const getUserPosts = (username: string): Promise<{ posts: ProfilePost[] }> =>
     `/posts/user/${encodeURIComponent(username)}`,
   );
 
+const getPostById = (postId: string): Promise<{ post: ProfilePost }> =>
+  authenticatedRequest<{ post: ProfilePost }>(`/posts/${postId}`);
+
 const getUserConnections = (
   username: string,
   connectionType: "followers" | "following",
@@ -81,10 +97,81 @@ const getUserConnections = (
     `/users/${encodeURIComponent(username)}/${connectionType}`,
   );
 
+const followUser = (username: string): Promise<{ following: boolean }> =>
+  authenticatedRequest<{ following: boolean }>(
+    `/users/${encodeURIComponent(username)}/follow`,
+    { method: "POST" },
+  );
+
+const unfollowUser = (username: string): Promise<{ following: boolean }> =>
+  authenticatedRequest<{ following: boolean }>(
+    `/users/${encodeURIComponent(username)}/follow`,
+    { method: "DELETE" },
+  );
+
 const getCurrentProfilePath = (): string => {
   const username = localStorage.getItem("userUsername");
   return username ? `/profile/${encodeURIComponent(username)}` : "/profile";
 };
+
+const createPost = async (details: {
+  description: string;
+  visibility: "public" | "private";
+  images: File[];
+}): Promise<{ post: ProfilePost }> => {
+  const token = localStorage.getItem("token");
+  const formData = new FormData();
+  formData.append("description", details.description);
+  formData.append("visibility", details.visibility);
+  details.images.forEach((image) => formData.append("images", image));
+
+  const response = await fetch(`${API_URL}/posts`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token || ""}` },
+    body: formData,
+  });
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) throw new Error(data.message || "Unable to create post");
+  return data as { post: ProfilePost };
+};
+
+const likePost = (postId: string): Promise<{ likesCount: number }> =>
+  authenticatedRequest<{ likesCount: number }>(`/posts/${postId}/like`, {
+    method: "POST",
+  });
+
+const unlikePost = (postId: string): Promise<{ likesCount: number }> =>
+  authenticatedRequest<{ likesCount: number }>(`/posts/${postId}/like`, {
+    method: "DELETE",
+  });
+
+const getPostComments = (
+  postId: string,
+): Promise<{ comments: PostComment[] }> =>
+  authenticatedRequest<{ comments: PostComment[] }>(
+    `/posts/${postId}/comments`,
+  );
+
+const createComment = (
+  postId: string,
+  text: string,
+): Promise<{ comment: PostComment }> =>
+  authenticatedRequest<{ comment: PostComment }>(`/posts/${postId}/comments`, {
+    method: "POST",
+    body: JSON.stringify({ text }),
+    headers: { "Content-Type": "application/json" },
+  });
+
+const updatePost = async (
+  postId: string,
+  details: Pick<ProfilePost, "description" | "visibility">,
+): Promise<{ post: ProfilePost }> =>
+  authenticatedRequest<{ post: ProfilePost }>(`/posts/${postId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(details),
+  });
 
 const updateProfile = async (details: {
   name: string;
@@ -140,8 +227,17 @@ export {
   getProfileByUsername,
   getMyPosts,
   getUserPosts,
+  getPostById,
   getUserConnections,
+  followUser,
+  unfollowUser,
   getCurrentProfilePath,
+  createPost,
+  likePost,
+  unlikePost,
+  getPostComments,
+  createComment,
+  updatePost,
   updateProfile,
   updateAvatar,
   removeAvatar,

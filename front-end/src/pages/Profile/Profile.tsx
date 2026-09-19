@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import PrimaryButton from "../../components/Button/Button";
 import EditProfile from "./EditProfile";
 import ConnectionsModal from "./ConnectionsModal";
+import CreatePost from "./CreatePost";
+import Feed from "../../components/Feed/Feed";
 import CardLayout from "../../layout/CardLayout/CardLayout";
 import {
   getCurrentProfile,
@@ -11,6 +13,8 @@ import {
   getMyPosts,
   getUserPosts,
   getUserConnections,
+  followUser,
+  unfollowUser,
   type ProfilePost,
   type ProfileConnection,
   type ProfileUser,
@@ -24,10 +28,15 @@ function Profile() {
   const { username } = useParams<{ username: string }>();
   const [user, setUser] = useState<ProfileUser | null>(null);
   const [posts, setPosts] = useState<ProfilePost[]>([]);
+  const [viewerId, setViewerId] = useState<string | undefined>();
   const [isOwner, setIsOwner] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isFollowLoading, setIsFollowLoading] = useState(false);
+  const [followError, setFollowError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState(false);
   const [connections, setConnections] = useState<ProfileConnection[]>([]);
   const [connectionType, setConnectionType] = useState<
     "followers" | "following" | null
@@ -59,7 +68,15 @@ function Profile() {
 
         setUser(profileResponse.user);
         setPosts(postsResponse.posts);
+        setViewerId(currentProfileResponse?.user.id);
         setIsOwner(profileIsOwned);
+        setIsFollowing(
+          Boolean(
+            currentProfileResponse?.user.following.includes(
+              profileResponse.user.id,
+            ),
+          ),
+        );
       } catch (error) {
         setErrorMessage(
           error instanceof Error
@@ -101,6 +118,35 @@ function Profile() {
     localStorage.removeItem("userRole");
     localStorage.removeItem("userEmail");
     navigate("/login", { replace: true });
+  };
+
+  const toggleFollow = async () => {
+    if (!username || !user || !viewerId || isFollowLoading) return;
+
+    setIsFollowLoading(true);
+    setFollowError("");
+    try {
+      const response = isFollowing
+        ? await unfollowUser(username)
+        : await followUser(username);
+      setIsFollowing(response.following);
+      setUser((currentUser) =>
+        currentUser
+          ? {
+              ...currentUser,
+              followers: response.following
+                ? [...currentUser.followers, viewerId]
+                : currentUser.followers.filter((id) => id !== viewerId),
+            }
+          : currentUser,
+      );
+    } catch (error) {
+      setFollowError(
+        error instanceof Error ? error.message : "Unable to update follow.",
+      );
+    } finally {
+      setIsFollowLoading(false);
+    }
   };
 
   return (
@@ -175,45 +221,54 @@ function Profile() {
                 />
               </div>
             )}
+            {!isOwner && viewerId && (
+              <div className="profile-actions">
+                <PrimaryButton
+                  label={
+                    isFollowLoading
+                      ? "Please wait..."
+                      : isFollowing
+                        ? "Following"
+                        : "Follow"
+                  }
+                  type="button"
+                  variant={isFollowing ? "secondary" : "primary"}
+                  disabled={isFollowLoading}
+                  onClick={toggleFollow}
+                />
+                {followError && (
+                  <p className="profile-message error">{followError}</p>
+                )}
+              </div>
+            )}
           </section>
 
           <section className="profile-posts">
             <div className="profile-posts-header">
               <h2>Posts</h2>
-              <span>
-                {posts.length} {posts.length === 1 ? "post" : "posts"}
-              </span>
-            </div>
-            {posts.length === 0 ? (
-              <p className="profile-message">
-                {isOwner
-                  ? "You have not shared anything yet."
-                  : "No public posts yet."}
-              </p>
-            ) : (
-              <div className="profile-post-grid">
-                {posts.map((post) => (
-                  <article className="profile-post" key={post._id}>
-                    {post.photos[0] && (
-                      <img
-                        className="profile-post-photo"
-                        src={post.photos[0]}
-                        alt=""
-                      />
-                    )}
-                    {post.description && <p>{post.description}</p>}
-                    <div className="profile-post-meta">
-                      <span>
-                        {new Date(post.createdAt).toLocaleDateString()}
-                      </span>
-                      <span className="profile-post-visibility">
-                        {post.visibility}
-                      </span>
-                    </div>
-                  </article>
-                ))}
+              <div className="profile-posts-heading-actions">
+                <span>
+                  {posts.length} {posts.length === 1 ? "post" : "posts"}
+                </span>
+                {isOwner && (
+                  <PrimaryButton
+                    label="Create post"
+                    type="button"
+                    onClick={() => setIsCreatePostModalOpen(true)}
+                  />
+                )}
               </div>
-            )}
+            </div>
+            <Feed
+              posts={posts}
+              fallbackAuthor={user}
+              currentUserId={viewerId}
+              emptyMessage={
+                isOwner
+                  ? "You have not shared anything yet."
+                  : "No public posts yet."
+              }
+            />
           </section>
           {isEditModalOpen && (
             <EditProfile
@@ -230,6 +285,14 @@ function Profile() {
                   );
                 }
               }}
+            />
+          )}
+          {isCreatePostModalOpen && (
+            <CreatePost
+              onClose={() => setIsCreatePostModalOpen(false)}
+              onCreated={(post) =>
+                setPosts((currentPosts) => [post, ...currentPosts])
+              }
             />
           )}
           {connectionType && (

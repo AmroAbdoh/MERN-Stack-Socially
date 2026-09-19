@@ -115,6 +115,16 @@
   gap: 16px;
   margin-bottom: 18px;
 }
+.profile-posts-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.profile-posts-heading-actions .primary-btn {
+  min-height: 38px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+}
 .profile-posts-header h2 {
   margin: 0;
   color: var(--text);
@@ -214,5 +224,15 @@
 
   .profile-posts {
     padding-inline: 16px;
+  }
+
+  .profile-posts-header {
+    align-items: flex-start;
+  }
+
+  .profile-posts-heading-actions {
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 8px;
   }
 }

@@ -1,0 +1,112 @@
+.create-post-form {
+  display: grid;
+  gap: 16px;
+}
+
+.create-post-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.create-post-form textarea,
+.create-post-form select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 11px 13px;
+  background: var(--surface-soft);
+  color: var(--text);
+  font: inherit;
+}
+
+.create-post-form textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.create-post-form textarea:focus,
+.create-post-form select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--focus-ring);
+}
+
+.create-post-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+@media (max-width: 520px) {
+  .create-post-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.create-post-image-field {
+  display: grid;
+  gap: 9px;
+  padding: 14px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.create-post-image-field input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.create-post-file-label {
+  justify-self: start;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.create-post-file-label:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.create-post-image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.create-post-image-preview {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.create-post-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.create-post-image-preview button {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  border: 0;
+  border-radius: 6px;
+  padding: 4px 6px;
+  background: color-mix(in srgb, var(--text) 78%, transparent);
+  color: var(--on-primary);
+  font-size: 0.68rem;
+  cursor: pointer;
+}

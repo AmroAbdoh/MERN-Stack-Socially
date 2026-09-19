@@ -17,7 +17,9 @@ const createPost = asyncHandler(async (req, res) => {
 
   if (!userId) throw new UnauthenticatedError("Authentication Invalid");
 
-  const { description, photos, visibility } = req.body;
+  const { description, visibility } = req.body;
+  const uploadedFiles = (req.files as Express.Multer.File[] | undefined) || [];
+  const photos = uploadedFiles.map((file) => `/uploads/posts/${file.filename}`);
 
   if (!description?.trim() && (!photos || photos.length === 0))
     throw new BadRequestError(
@@ -89,9 +91,40 @@ const getPost = asyncHandler(async (req, res) => {
   }
 
   await post.populate("postedBy", "name username avatar");
+  await post.populate("likedBy", "name username avatar");
+
+  const postData = post.toObject();
+  const postedBy = postData.postedBy as unknown as {
+    _id: unknown;
+    name: string;
+    username: string;
+    avatar?: string;
+  };
+  const likedBy = (
+    postData.likedBy as unknown as Array<{
+      _id: unknown;
+      name: string;
+      username: string;
+      avatar?: string;
+    }>
+  ).map((user) => ({
+    id: user._id,
+    name: user.name,
+    username: user.username,
+    avatar: user.avatar,
+  }));
 
   res.status(StatusCodes.OK).json({
-    post,
+    post: {
+      ...postData,
+      postedBy: {
+        id: postedBy._id,
+        name: postedBy.name,
+        username: postedBy.username,
+        avatar: postedBy.avatar,
+      },
+      likedBy,
+    },
   });
 });
 

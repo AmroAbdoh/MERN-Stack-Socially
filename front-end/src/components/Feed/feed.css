@@ -1,0 +1,13 @@
+.feed {
+  display: flex;
+  width: min(100%, 720px);
+  flex-direction: column;
+  gap: 18px;
+  margin-inline: auto;
+}
+
+.feed__empty {
+  padding: 28px 0;
+  color: var(--text-muted);
+  text-align: center;
+}

@@ -1,0 +1,79 @@
+.user-list {
+  display: grid;
+  gap: 8px;
+}
+
+.user-list__item {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--surface-soft);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.user-list__item:hover {
+  border-color: var(--accent);
+  background: var(--surface);
+  transform: translateX(2px);
+}
+
+.user-list__avatar {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+}
+
+.user-list__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-list__avatar svg {
+  width: 25px;
+  height: 25px;
+  fill: var(--on-primary);
+}
+
+.user-list__details {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.user-list__details strong,
+.user-list__details span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-list__details strong {
+  font-size: 0.92rem;
+}
+
+.user-list__details span {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.user-list__arrow {
+  color: var(--accent);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
