@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 
 import Post from "../models/post.model";
+import User from "../models/user.model";
 import Comment from "../models/comment.model";
 import Notification from "../models/notification.model";
 import {
@@ -52,6 +53,21 @@ const getMyPosts = asyncHandler(async (req, res) => {
   if (!userId) throw new UnauthenticatedError("Authentication invalid");
 
   const posts = await Post.find({ postedBy: userId })
+    .populate("postedBy", "name username avatar")
+    .sort({ createdAt: -1 });
+
+  res.status(StatusCodes.OK).json({
+    posts,
+  });
+});
+
+const getUserPosts = asyncHandler(async (req, res) => {
+  const { username } = req.params;
+  const user = await User.findOne({ username }).select("_id");
+
+  if (!user) throw new NotFoundError("User not found");
+
+  const posts = await Post.find({ postedBy: user._id, visibility: "public" })
     .populate("postedBy", "name username avatar")
     .sort({ createdAt: -1 });
 
@@ -219,6 +235,7 @@ export {
   createPost,
   getPosts,
   getMyPosts,
+  getUserPosts,
   getPost,
   updatePost,
   deletePost,

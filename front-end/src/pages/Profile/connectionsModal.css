@@ -1,0 +1,90 @@
+.connections-modal__list {
+  display: grid;
+  gap: 8px;
+}
+
+.connections-modal__person {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--surface-soft);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.connections-modal__person:hover {
+  border-color: var(--accent);
+  background: var(--surface);
+  transform: translateX(2px);
+}
+
+.connections-modal__avatar {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+}
+
+.connections-modal__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.connections-modal__avatar svg {
+  width: 25px;
+  height: 25px;
+  fill: var(--on-primary);
+}
+
+.connections-modal__details {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.connections-modal__details strong,
+.connections-modal__details span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.connections-modal__details strong {
+  font-size: 0.92rem;
+}
+
+.connections-modal__details span {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.connections-modal__arrow {
+  color: var(--accent);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.connections-modal__empty {
+  margin: 0;
+  padding: 12px 0 8px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.connections-modal__empty--error {
+  color: var(--danger);
+}

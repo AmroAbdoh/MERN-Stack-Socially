@@ -4,6 +4,7 @@ import {
   createPost,
   getPosts,
   getMyPosts,
+  getUserPosts,
   getPost,
   updatePost,
   deletePost,
@@ -16,6 +17,7 @@ const router = Router();
 
 router.get("/", getPosts);
 router.get("/me", authenticateUser, getMyPosts);
+router.get("/user/:username", getUserPosts);
 router.get("/:id", authenticateUser, getPost);
 router.post("/", authenticateUser, createPost);
 router.patch("/:id", authenticateUser, updatePost);

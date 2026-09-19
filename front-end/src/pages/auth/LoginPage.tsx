@@ -25,6 +25,7 @@ function LoginPage() {
 
       localStorage.setItem("token", response.token);
       localStorage.setItem("userName", response.user.name);
+      localStorage.setItem("userUsername", response.user.username);
       localStorage.setItem("userEmail", response.user.email);
       localStorage.setItem("userRole", response.user.role || "user");
       navigate("/");

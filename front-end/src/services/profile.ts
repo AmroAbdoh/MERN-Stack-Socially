@@ -16,7 +16,7 @@ export type ProfileUser = {
   id: string;
   name: string;
   username: string;
-  email: string;
+  email?: string;
   avatar?: string;
   bio?: string;
   followers: string[];
@@ -32,6 +32,11 @@ export type ProfilePost = {
   visibility: "public" | "private";
   createdAt: string;
 };
+
+export type ProfileConnection = Pick<
+  ProfileUser,
+  "id" | "name" | "username" | "avatar" | "bio"
+>;
 
 const authenticatedRequest = async <T>(path: string): Promise<T> => {
   const token = localStorage.getItem("token");
@@ -53,8 +58,33 @@ const authenticatedRequest = async <T>(path: string): Promise<T> => {
 const getCurrentProfile = (): Promise<{ user: ProfileUser }> =>
   authenticatedRequest<{ user: ProfileUser }>("/users/me");
 
+const getProfileByUsername = (
+  username: string,
+): Promise<{ user: ProfileUser }> =>
+  authenticatedRequest<{ user: ProfileUser }>(
+    `/users/${encodeURIComponent(username)}`,
+  );
+
 const getMyPosts = (): Promise<{ posts: ProfilePost[] }> =>
   authenticatedRequest<{ posts: ProfilePost[] }>("/posts/me");
+
+const getUserPosts = (username: string): Promise<{ posts: ProfilePost[] }> =>
+  authenticatedRequest<{ posts: ProfilePost[] }>(
+    `/posts/user/${encodeURIComponent(username)}`,
+  );
+
+const getUserConnections = (
+  username: string,
+  connectionType: "followers" | "following",
+): Promise<{ users: ProfileConnection[] }> =>
+  authenticatedRequest<{ users: ProfileConnection[] }>(
+    `/users/${encodeURIComponent(username)}/${connectionType}`,
+  );
+
+const getCurrentProfilePath = (): string => {
+  const username = localStorage.getItem("userUsername");
+  return username ? `/profile/${encodeURIComponent(username)}` : "/profile";
+};
 
 const updateProfile = async (details: {
   name: string;
@@ -107,7 +137,11 @@ const removeAvatar = async (): Promise<{ avatar: string }> => {
 export {
   getAssetUrl,
   getCurrentProfile,
+  getProfileByUsername,
   getMyPosts,
+  getUserPosts,
+  getUserConnections,
+  getCurrentProfilePath,
   updateProfile,
   updateAvatar,
   removeAvatar,

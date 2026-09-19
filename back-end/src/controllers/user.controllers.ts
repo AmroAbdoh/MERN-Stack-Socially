@@ -59,6 +59,38 @@ const getUserByUsername = asyncHandler(async (req, res) => {
   });
 });
 
+const createConnectionsHandler = (connectionType: "followers" | "following") =>
+  asyncHandler(async (req, res) => {
+    const username = req.params.username;
+    const user = await User.findOne({ username }).populate(
+      connectionType,
+      "name username avatar bio",
+    );
+
+    if (!user) throw new UnauthenticatedError("user not found");
+
+    const users = (
+      user[connectionType] as unknown as Array<{
+        _id: unknown;
+        name: string;
+        username: string;
+        avatar?: string;
+        bio?: string;
+      }>
+    ).map((connection) => ({
+      id: connection._id,
+      name: connection.name,
+      username: connection.username,
+      avatar: connection.avatar,
+      bio: connection.bio,
+    }));
+
+    res.status(StatusCodes.OK).json({ users });
+  });
+
+const getFollowers = createConnectionsHandler("followers");
+const getFollowing = createConnectionsHandler("following");
+
 const updateProfile = asyncHandler(async (req, res) => {
   const userId = req.user?.userId;
 
@@ -222,6 +254,8 @@ const unfollowUser = asyncHandler(async (req, res) => {
 export {
   getCurrentUser,
   getUserByUsername,
+  getFollowers,
+  getFollowing,
   updateProfile,
   updateAvatar,
   removeAvatar,

@@ -3,6 +3,8 @@ import { Router } from "express";
 import {
   getCurrentUser,
   getUserByUsername,
+  getFollowers,
+  getFollowing,
   updateProfile,
   updateAvatar,
   removeAvatar,
@@ -15,6 +17,8 @@ import { uploadAvatar } from "../middleware/upload.middleware";
 const router = Router();
 
 router.get("/me", authenticateUser, getCurrentUser);
+router.get("/:username/followers", getFollowers);
+router.get("/:username/following", getFollowing);
 router.get("/:username", getUserByUsername);
 router.patch("/me", authenticateUser, updateProfile);
 router.patch(

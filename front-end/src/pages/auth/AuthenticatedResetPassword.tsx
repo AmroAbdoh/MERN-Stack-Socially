@@ -11,6 +11,7 @@ import {
   resetPassword,
   verifySecurityAnswer,
 } from "../../services/auth";
+import { getCurrentProfilePath } from "../../services/profile";
 
 import "./AuthPage.css";
 
@@ -171,7 +172,7 @@ function AuthResetPassword() {
           <button
             type="button"
             className="switch-link"
-            onClick={() => navigate("/profile")}
+            onClick={() => navigate(getCurrentProfilePath())}
           >
             Back to profile
           </button>

@@ -29,7 +29,7 @@ function AppRouter() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route element={<AppLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:username" element={<Profile />} />
         <Route path="/auth-reset-password" element={<AuthResetPassword />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />

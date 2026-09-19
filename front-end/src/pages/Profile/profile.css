@@ -76,8 +76,16 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
+  border: 0;
+  padding: 0;
+  background: transparent;
   color: var(--text-muted);
   font-size: 0.82rem;
+  text-align: left;
+  cursor: pointer;
+}
+.profile-stat:hover {
+  color: var(--accent);
 }
 .profile-stat strong {
   color: var(--text);

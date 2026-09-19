@@ -6,18 +6,37 @@ import "./navbar.css";
 import SearchField from "../SearchField/SearchField";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import ThemeLogo from "../ThemeLogo/ThemeLogo";
+import {
+  getAssetUrl,
+  getCurrentProfile,
+  getCurrentProfilePath,
+} from "../../services/profile";
 
 function Navbar() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(
     Boolean(localStorage.getItem("token")),
   );
+  const [avatar, setAvatar] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const syncAuthState = () => {
-      setIsLoggedIn(Boolean(localStorage.getItem("token")));
+      const loggedIn = Boolean(localStorage.getItem("token"));
+      setIsLoggedIn(loggedIn);
+      if (!loggedIn) setAvatar("");
+    };
+
+    const loadAvatar = async () => {
+      if (!localStorage.getItem("token")) return;
+
+      try {
+        const response = await getCurrentProfile();
+        setAvatar(response.user.avatar || "");
+      } catch {
+        setAvatar("");
+      }
     };
 
     const handleClickOutside = (event: MouseEvent) => {
@@ -27,10 +46,13 @@ function Navbar() {
     };
 
     window.addEventListener("storage", syncAuthState);
+    window.addEventListener("profilechange", loadAvatar);
     document.addEventListener("mousedown", handleClickOutside);
+    loadAvatar();
 
     return () => {
       window.removeEventListener("storage", syncAuthState);
+      window.removeEventListener("profilechange", loadAvatar);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
@@ -38,8 +60,10 @@ function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
+    localStorage.removeItem("userUsername");
     localStorage.removeItem("userRole");
     localStorage.removeItem("userEmail");
+    setAvatar("");
     setIsLoggedIn(false);
     setIsMenuOpen(false);
     navigate("/login", { replace: true });
@@ -93,13 +117,21 @@ function Navbar() {
             <div className="navbar__profile-wrapper" ref={menuRef}>
               <button
                 type="button"
-                className="navbar__profile-button"
+                className={`navbar__profile-button${avatar ? " navbar__profile-button--avatar" : ""}`}
                 onClick={() => setIsMenuOpen((prev) => !prev)}
                 aria-label="Open profile menu"
               >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z" />
-                </svg>
+                {avatar ? (
+                  <img
+                    className="navbar__avatar"
+                    src={`${getAssetUrl(avatar)}?v=${encodeURIComponent(avatar)}`}
+                    alt=""
+                  />
+                ) : (
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z" />
+                  </svg>
+                )}
               </button>
 
               {isMenuOpen && (
@@ -107,7 +139,7 @@ function Navbar() {
                   <button
                     type="button"
                     className="navbar__dropdown-item"
-                    onClick={() => navigate("/profile")}
+                    onClick={() => navigate(getCurrentProfilePath())}
                   >
                     Profile
                   </button>
