@@ -6,6 +6,11 @@ import "./navbar.css";
 import SearchField from "../SearchField/SearchField";
 import ThemeToggle from "../ThemeToggle/ThemeToggle";
 import ThemeLogo from "../ThemeLogo/ThemeLogo";
+import NotificationDropdown from "../NotificationDropdown/NotificationDropdown";
+import {
+  connectNotificationSocket,
+  getNotifications,
+} from "../../services/notifications";
 import {
   getAssetUrl,
   getCurrentProfile,
@@ -20,8 +25,13 @@ function Navbar() {
   const [avatar, setAvatar] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const notificationRef = useRef<HTMLDivElement | null>(null);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
 
   useEffect(() => {
+    let disconnectNotifications: (() => void) | undefined;
+
     const syncAuthState = () => {
       const loggedIn = Boolean(localStorage.getItem("token"));
       setIsLoggedIn(loggedIn);
@@ -34,23 +44,44 @@ function Navbar() {
       try {
         const response = await getCurrentProfile();
         setAvatar(response.user.avatar || "");
+        const notifications = await getNotifications();
+        setUnreadNotificationCount(notifications.unreadCount);
+
+        const socket = connectNotificationSocket(response.user.id);
+        const handleNewNotification = () => {
+          setUnreadNotificationCount((count) => count + 1);
+        };
+        socket.on("newNotification", handleNewNotification);
+
+        disconnectNotifications = () => {
+          socket.off("newNotification", handleNewNotification);
+          socket.emit("leaveNotifications", response.user.id);
+          socket.disconnect();
+        };
       } catch {
         setAvatar("");
+        setUnreadNotificationCount(0);
       }
     };
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      const clickedProfileMenu = menuRef.current?.contains(target);
+      const clickedNotifications = notificationRef.current?.contains(target);
+
+      if (!clickedProfileMenu && !clickedNotifications) {
         setIsMenuOpen(false);
+        setIsNotificationsOpen(false);
       }
     };
 
     window.addEventListener("storage", syncAuthState);
     window.addEventListener("profilechange", loadAvatar);
     document.addEventListener("mousedown", handleClickOutside);
-    loadAvatar();
+    void loadAvatar();
 
     return () => {
+      disconnectNotifications?.();
       window.removeEventListener("storage", syncAuthState);
       window.removeEventListener("profilechange", loadAvatar);
       document.removeEventListener("mousedown", handleClickOutside);
@@ -66,6 +97,7 @@ function Navbar() {
     setAvatar("");
     setIsLoggedIn(false);
     setIsMenuOpen(false);
+    setIsNotificationsOpen(false);
     navigate("/login", { replace: true });
   };
 
@@ -104,16 +136,32 @@ function Navbar() {
                 {/* Message */}
               </svg>
             </button>
-            <button
-              type="button"
-              onClick={() => navigate("/notifications")}
-              className="navbar__profile-button"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
-                {/* Notification */}
-              </svg>
-            </button>
+              <div className="navbar__notification-wrapper" ref={notificationRef}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsNotificationsOpen((previous) => !previous);
+                    setIsMenuOpen(false);
+                  }}
+                  className="navbar__profile-button"
+                  aria-label="Open notifications"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.93 6 11v5l-2 2v1h16v-1l-2-2z" />
+                  </svg>
+                  {unreadNotificationCount > 0 && (
+                    <span className="navbar__notification-badge">
+                      {unreadNotificationCount > 99 ? "99+" : unreadNotificationCount}
+                    </span>
+                  )}
+                </button>
+                {isNotificationsOpen && (
+                  <NotificationDropdown
+                    onUnreadCountChange={setUnreadNotificationCount}
+                    onClose={() => setIsNotificationsOpen(false)}
+                  />
+                )}
+              </div>
             <div className="navbar__profile-wrapper" ref={menuRef}>
               <button
                 type="button"

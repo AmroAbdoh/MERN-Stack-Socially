@@ -38,6 +38,8 @@ const createComment = asyncHandler(async (req, res) => {
     text: text.trim(),
   });
 
+  await comment.populate("postedBy", "name username avatar");
+
   await createNotification({
     recipient: post.postedBy,
     sender: userId,
@@ -48,7 +50,15 @@ const createComment = asyncHandler(async (req, res) => {
 
   res.status(StatusCodes.CREATED).json({
     message: "Comment created successfully",
-    comment,
+    comment: {
+      ...comment.toObject(),
+      postedBy: {
+        id: (comment.postedBy as any)._id,
+        name: (comment.postedBy as any).name,
+        username: (comment.postedBy as any).username,
+        avatar: (comment.postedBy as any).avatar,
+      },
+    },
   });
 });
 
@@ -71,7 +81,15 @@ const getPostComments = asyncHandler(async (req, res) => {
     .sort({ createdAt: -1 });
 
   res.status(StatusCodes.OK).json({
-    comments,
+    comments: comments.map((comment) => ({
+      ...comment.toObject(),
+      postedBy: {
+        id: (comment.postedBy as any)._id,
+        name: (comment.postedBy as any).name,
+        username: (comment.postedBy as any).username,
+        avatar: (comment.postedBy as any).avatar,
+      },
+    })),
   });
 });
 

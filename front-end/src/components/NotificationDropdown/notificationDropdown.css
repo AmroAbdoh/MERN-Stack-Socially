@@ -1,0 +1,131 @@
+.notification-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 30;
+  width: min(360px, calc(100vw - 32px));
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 14px 34px var(--shadow-primary);
+}
+
+.notification-dropdown__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.notification-dropdown__heading strong {
+  color: var(--text);
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.notification-dropdown__heading button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--primary);
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.notification-dropdown__heading button:disabled {
+  color: var(--disabled-bg);
+  cursor: not-allowed;
+}
+
+.notification-dropdown__list {
+  display: grid;
+  max-height: 360px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.notification-dropdown__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 38px 1fr 7px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.notification-dropdown__item:hover,
+.notification-dropdown__item.is-unread {
+  background: var(--surface-soft);
+}
+
+.notification-dropdown__avatar {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  cursor: pointer;
+}
+
+.notification-dropdown__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.notification-dropdown__avatar svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--on-primary);
+}
+
+.notification-dropdown__text {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.notification-dropdown__text strong {
+  color: var(--text);
+}
+
+.notification-dropdown__text small {
+  display: block;
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+
+.notification-dropdown__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.notification-dropdown__message {
+  margin: 0;
+  padding: 28px 16px;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  text-align: center;
+}
+
+.notification-dropdown__message--error {
+  color: var(--danger);
+}

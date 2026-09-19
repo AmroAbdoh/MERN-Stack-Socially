@@ -11,7 +11,10 @@ import {
   likePost,
   unlikePost,
 } from "../controllers/post.controller";
-import { authenticateUser } from "../middleware/auth.middleware";
+import {
+  authenticateUser,
+  optionallyAuthenticateUser,
+} from "../middleware/auth.middleware";
 import { uploadPostImages } from "../middleware/upload.middleware";
 
 const router = Router();
@@ -19,7 +22,7 @@ const router = Router();
 router.get("/", getPosts);
 router.get("/me", authenticateUser, getMyPosts);
 router.get("/user/:username", getUserPosts);
-router.get("/:id", getPost);
+router.get("/:id", optionallyAuthenticateUser, getPost);
 router.post(
   "/",
   authenticateUser,

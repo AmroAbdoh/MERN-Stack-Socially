@@ -94,7 +94,7 @@ function Post({
     try {
       const response = await createComment(post._id, commentText);
       setComments((currentComments) => [
-        { ...response.comment, postedBy: fallbackAuthor },
+        response.comment,
         ...currentComments,
       ]);
       setCommentText("");
@@ -152,6 +152,17 @@ function Post({
         <time dateTime={post.createdAt}>
           {new Date(post.createdAt).toLocaleDateString()}
         </time>
+        {post.visibility === "private" && (
+          <span
+            className="post-card__private"
+            title="Private post"
+            aria-label="Private post"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M17 9h-1V7a4 4 0 00-8 0v2H7a2 2 0 00-2 2v8a2 2 0 002 2h10a2 2 0 002-2v-8a2 2 0 00-2-2zm-7-2a2 2 0 114 0v2h-4V7zm6 12H8v-6h8v6z" />
+            </svg>
+          </span>
+        )}
       </header>
 
       {post.description && (
@@ -227,8 +238,27 @@ function Post({
                   : fallbackAuthor;
               return (
                 <div className="post-card__comment" key={comment._id}>
-                  <strong>{commentAuthor?.name || "User"}</strong>
-                  <p>{comment.text}</p>
+                  <button
+                    type="button"
+                    className="post-card__comment-avatar"
+                    onClick={() =>
+                      commentAuthor?.username &&
+                      navigate(`/profile/${encodeURIComponent(commentAuthor.username)}`)
+                    }
+                    aria-label={`Open ${commentAuthor?.name || "user"}'s profile`}
+                  >
+                    {commentAuthor?.avatar ? (
+                      <img src={getAssetUrl(commentAuthor.avatar)} alt="" />
+                    ) : (
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5z" />
+                      </svg>
+                    )}
+                  </button>
+                  <div>
+                    <strong>{commentAuthor?.name || "User"}</strong>
+                    <p>{comment.text}</p>
+                  </div>
                 </div>
               );
             })

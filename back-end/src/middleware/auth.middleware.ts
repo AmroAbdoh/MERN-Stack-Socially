@@ -29,3 +29,31 @@ export const authenticateUser = (
     next(new UnauthenticatedError("Authentication invalid"));
   }
 };
+
+export const optionallyAuthenticateUser = (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+): void => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    next();
+    return;
+  }
+
+  const [scheme, token] = authHeader.split(" ");
+
+  if (scheme !== "Bearer" || !token) {
+    next();
+    return;
+  }
+
+  try {
+    req.user = verifyJWT(token);
+  } catch {
+    // Invalid credentials cannot grant access to private posts.
+  }
+
+  next();
+};
