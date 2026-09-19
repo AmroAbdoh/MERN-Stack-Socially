@@ -5,11 +5,16 @@ import "./themeLogo.css";
 type ThemeLogoProps = {
   alt?: string;
   className?: string;
+  theme?: Theme;
 };
 
 type Theme = "light" | "dark";
 
-function ThemeLogo({ alt = "Socially logo", className = "" }: ThemeLogoProps) {
+function ThemeLogo({
+  alt = "Socially logo",
+  className = "",
+  theme: fixedTheme,
+}: ThemeLogoProps) {
   const [theme, setTheme] = useState<Theme>(
     document.documentElement.dataset.theme === "dark" ? "dark" : "light",
   );
@@ -26,7 +31,8 @@ function ThemeLogo({ alt = "Socially logo", className = "" }: ThemeLogoProps) {
     return () => window.removeEventListener("themechange", syncTheme);
   }, []);
 
-  const logoPath = theme === "dark" ? "/darkmode_logo.png" : "/logo.png";
+  const logoPath =
+    (fixedTheme ?? theme) === "dark" ? "/darkmode_logo.png" : "/logo.png";
 
   return (
     <span className={`theme-logo ${className}`.trim()}>

@@ -14,6 +14,11 @@
 }
 
 .auth-visual {
+  --primary: #a53860;
+  --primary-hover: #8a2c4e;
+  --text: #450920;
+  --accent: #da627d;
+  --on-primary: #ffffff;
   position: relative;
   isolation: isolate;
   background: radial-gradient(
@@ -115,7 +120,7 @@
 }
 
 .auth-panel {
-  background: #f9fdf9;
+  background: var(--bg);
   display: flex;
   align-items: center;
   justify-content: center;

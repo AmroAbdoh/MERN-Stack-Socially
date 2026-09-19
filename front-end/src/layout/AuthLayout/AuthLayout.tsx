@@ -15,7 +15,7 @@ function AuthLayout({ children, title, description }: AuthLayoutProps) {
         <div className="auth-visual">
           <div className="auth-visual-content">
             <div className="auth-logo-wrap">
-              <ThemeLogo alt="Social Media Platform logo" />
+              <ThemeLogo alt="Social Media Platform logo" theme="light" />
             </div>
             <p className="auth-brand-name">Socially</p>
             <p className="auth-eyebrow">Your people, your pulse</p>
