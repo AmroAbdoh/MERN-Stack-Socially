@@ -1,0 +1,15 @@
+{
+  "name": "social-media-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A full-stack social media platform built with React, Express, MongoDB, and Socket.IO.",
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail --names backend,frontend --prefix-colors blue,green \"npm run dev --prefix back-end\" \"npm run dev --prefix front-end\"",
+    "install:all": "npm install --prefix back-end && npm install --prefix front-end",
+    "build": "npm run build --prefix front-end",
+    "lint": "npm run lint --prefix front-end"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
