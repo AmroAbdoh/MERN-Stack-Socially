@@ -271,6 +271,13 @@ function Profile() {
               posts={posts}
               fallbackAuthor={user}
               currentUserId={viewerId}
+              onPostDeleted={(postId) =>
+                setPosts((currentPosts) =>
+                  currentPosts.filter(
+                    (currentPost) => currentPost._id !== postId,
+                  ),
+                )
+              }
               emptyMessage={
                 isOwner
                   ? "You have not shared anything yet."

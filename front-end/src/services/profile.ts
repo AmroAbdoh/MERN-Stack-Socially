@@ -169,6 +169,21 @@ const createComment = (
     headers: { "Content-Type": "application/json" },
   });
 
+const updateComment = (
+  commentId: string,
+  text: string,
+): Promise<{ comment: PostComment }> =>
+  authenticatedRequest<{ comment: PostComment }>(`/comments/${commentId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ text }),
+    headers: { "Content-Type": "application/json" },
+  });
+
+const deleteComment = (commentId: string): Promise<{ message: string }> =>
+  authenticatedRequest<{ message: string }>(`/comments/${commentId}`, {
+    method: "DELETE",
+  });
+
 const updatePost = async (
   postId: string,
   details: Pick<ProfilePost, "description" | "visibility">,
@@ -177,6 +192,11 @@ const updatePost = async (
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(details),
+  });
+
+const deletePost = (postId: string): Promise<{ message: string }> =>
+  authenticatedRequest<{ message: string }>(`/posts/${postId}`, {
+    method: "DELETE",
   });
 
 const updateProfile = async (details: {
@@ -245,7 +265,10 @@ export {
   unlikePost,
   getPostComments,
   createComment,
+  updateComment,
+  deleteComment,
   updatePost,
+  deletePost,
   updateProfile,
   updateAvatar,
   removeAvatar,

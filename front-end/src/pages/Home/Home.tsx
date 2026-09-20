@@ -124,6 +124,13 @@ function Home() {
           <Feed
             posts={posts}
             currentUserId={currentUserId}
+            onPostDeleted={(postId) =>
+              setPosts((currentPosts) =>
+                currentPosts.filter(
+                  (currentPost) => currentPost._id !== postId,
+                ),
+              )
+            }
             emptyMessage="Your following feed is empty."
           />
         )}

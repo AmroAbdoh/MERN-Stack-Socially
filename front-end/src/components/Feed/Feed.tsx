@@ -8,6 +8,7 @@ type FeedProps = {
   fallbackAuthor?: ProfileConnection;
   currentUserId?: string;
   emptyMessage?: string;
+  onPostDeleted?: (postId: string) => void;
 };
 
 function Feed({
@@ -15,6 +16,7 @@ function Feed({
   fallbackAuthor,
   currentUserId,
   emptyMessage = "No posts yet.",
+  onPostDeleted,
 }: FeedProps) {
   if (posts.length === 0) {
     return <p className="feed__empty">{emptyMessage}</p>;
@@ -28,6 +30,7 @@ function Feed({
           post={post}
           fallbackAuthor={fallbackAuthor}
           currentUserId={currentUserId}
+          onDeleted={() => onPostDeleted?.(post._id)}
         />
       ))}
     </section>

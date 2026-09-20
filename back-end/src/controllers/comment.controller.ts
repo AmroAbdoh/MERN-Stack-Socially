@@ -120,10 +120,19 @@ const updateComment = asyncHandler(async (req, res) => {
   comment.text = text.trim();
 
   await comment.save();
+  await comment.populate("postedBy", "name username avatar");
 
   res.status(StatusCodes.OK).json({
     message: "Comment updated successfully",
-    comment,
+    comment: {
+      ...comment.toObject(),
+      postedBy: {
+        id: (comment.postedBy as any)._id,
+        name: (comment.postedBy as any).name,
+        username: (comment.postedBy as any).username,
+        avatar: (comment.postedBy as any).avatar,
+      },
+    },
   });
 });
 

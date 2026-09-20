@@ -120,7 +120,7 @@ select {
     radial-gradient(circle at 15% 20%, var(--surface-soft), transparent 32%),
     var(--bg);
   color: var(--text);
-  text-align: center;
+  
 }
 
 .home-page h1 {

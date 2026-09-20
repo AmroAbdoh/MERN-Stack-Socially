@@ -17,7 +17,7 @@
 
 .post-card__header {
   display: grid;
-  grid-template-columns: 44px 1fr auto;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
   align-items: center;
   gap: 11px;
   padding: 16px 18px 12px;
@@ -83,6 +83,41 @@
   fill: currentColor;
 }
 
+.post-card__meta {
+  display: grid;
+  justify-items: end;
+  gap: 5px;
+}
+
+.post-card__meta-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.post-card__delete-post {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.post-card__delete-post:hover {
+  background: var(--surface-soft);
+  color: var(--danger);
+}
+
+.post-card__delete-post svg {
+  width: 17px;
+  height: 17px;
+  fill: currentColor;
+}
+
 .post-card__description {
   margin: 0;
   padding: 6px 18px 16px;
@@ -124,15 +159,20 @@
 
 .post-card__footer {
   display: flex;
-  gap: 18px;
+  align-items: center;
+  gap: 8px;
   padding: 12px 18px;
   border-top: 1px solid var(--border);
 }
 
 .post-card__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   border: 0;
-  padding: 0;
-  background: transparent;
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: var(--surface-soft);
   color: var(--text-muted);
   font: inherit;
   font-size: 0.84rem;
@@ -140,19 +180,73 @@
   cursor: pointer;
 }
 
-.post-card__like-control {
+.post-card__like-group {
   display: inline-flex;
+  flex: 1;
   align-items: center;
   gap: 3px;
 }
 
-.post-card__action:hover,
-.post-card__action.is-liked {
+.post-card__action svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.post-card__like-button {
+  flex: 1;
+  border: 1px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  justify-content: center;
+}
+
+.post-card__like-button.is-liked {
+  background: var(--primary);
+  color: var(--on-primary);
+  justify-content: center;
+}
+
+.post-card__like-button:hover {
+  background: var(--primary-soft);
+  color: var(--primary-hover);
+}
+
+.post-card__like-button.is-liked:hover {
+  background: var(--primary-hover);
+  color: var(--on-primary);
+}
+
+.post-card__like-button strong {
+  margin-left: auto;
+  font-size: 0.78rem;
+}
+
+.post-card__comment-button:hover,
+.post-card__comment-button.is-active,
+.post-card__share-button:hover {
+  flex: 1;
+  background: var(--primary-soft);
   color: var(--primary);
 }
 
+.post-card__comment-button,
+.post-card__share-button {
+  flex: 1;
+  justify-content: center;
+}
+
 .post-card__likes-count {
-  min-width: 1ch;
+  min-width: 30px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 8px;
+  background: var(--surface-soft);
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-align: center;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -210,6 +304,52 @@
   color: var(--text);
   font-size: 0.84rem;
   line-height: 1.45;
+}
+
+.post-card__comment-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.post-card__comment-heading button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--primary);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+
+.post-card__comment-heading button:last-child {
+  color: var(--danger);
+}
+
+.post-card__comment-edit {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.post-card__comment-edit input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 6px 8px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.post-card__comment-edit button {
+  border: 0;
+  border-radius: 7px;
+  padding: 0 9px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .post-card__comment-form {

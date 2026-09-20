@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import PrimaryButton from "../../components/Button/Button";
-import LikesModal from "../../components/LikesModal/LikesModal";
 import Post from "../../components/Post/Post";
 import ModalLayout from "../../layout/ModalLayout/ModalLayout";
 import {
@@ -102,7 +101,6 @@ function PostPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [isLikesOpen, setIsLikesOpen] = useState(false);
 
   useEffect(() => {
     const loadPost = async () => {
@@ -136,10 +134,6 @@ function PostPage() {
       ? post.postedBy
       : undefined;
   const isOwner = Boolean(viewer && author && viewer.id === author.id);
-  const likedUsers = (post?.likedBy || []).filter(
-    (like): like is Exclude<typeof like, string> => typeof like !== "string",
-  );
-
   return (
     <main className="post-page">
       <div className="post-page__topbar">
@@ -170,7 +164,6 @@ function PostPage() {
           fallbackAuthor={author}
           currentUserId={viewer?.id}
           isDetail
-          onLikesClick={() => setIsLikesOpen(true)}
         />
       )}
       {isEditOpen && post && (
@@ -179,9 +172,6 @@ function PostPage() {
           onClose={() => setIsEditOpen(false)}
           onSaved={setPost}
         />
-      )}
-      {isLikesOpen && (
-        <LikesModal likes={likedUsers} onClose={() => setIsLikesOpen(false)} />
       )}
     </main>
   );
