@@ -11,13 +11,21 @@ import Messaging from "../pages/Messaging/Messaging";
 import Home from "../pages/Home/Home";
 import AppLayout from "../layout/AppLayout/AppLayout";
 
+function ProtectedLayout() {
+  if (!localStorage.getItem("token")) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <AppLayout />;
+}
+
 function AppRouter() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route element={<AppLayout />}>
+      <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/post/:postId" element={<PostPage />} />

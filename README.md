@@ -72,6 +72,38 @@ npm run dev
 
 The frontend runs at `http://localhost:5173` and the backend runs at `http://localhost:5000`.
 
+## Deploy Frontend on Render
+
+Create a new **Static Site** in Render using the same repository.
+
+Use these settings:
+
+| Setting | Value |
+| --- | --- |
+| Root Directory | `front-end` |
+| Build Command | `npm install && npm run build` |
+| Publish Directory | `dist` |
+
+Add this frontend environment variable in Render:
+
+```text
+VITE_API_URL=https://socially-fc2x.onrender.com/api
+```
+
+Add this rewrite in the Render Static Site settings so direct links such as `/profile/name` and `/messages` work:
+
+| Source | Destination | Action |
+| --- | --- | --- |
+| `/*` | `/index.html` | Rewrite |
+
+After Render gives the frontend its public URL, update the backend Web Service environment variable:
+
+```text
+CLIENT_URL=https://your-frontend-name.onrender.com
+```
+
+This allows Socket.IO connections from the deployed frontend. Trigger a backend redeploy after changing `CLIENT_URL`.
+
 ## Environment Variables
 
 ### Backend
