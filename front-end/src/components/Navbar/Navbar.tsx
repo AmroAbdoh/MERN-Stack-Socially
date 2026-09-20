@@ -161,49 +161,51 @@ function Navbar() {
                 className="navbar__profile-button"
                 aria-label="Open messages"
               >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                width="24"
-                height="24"
-                fill="currentColor"
-              >
-                <path d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4-.983L2 17l1.983-3.017A6.979 6.979 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" />
-                {/* Message */}
-              </svg>
-              {unreadMessageCount > 0 && (
-                <span className="navbar__notification-badge">
-                  {unreadMessageCount > 99 ? "99+" : unreadMessageCount}
-                </span>
-              )}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4-.983L2 17l1.983-3.017A6.979 6.979 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" />
+                  {/* Message */}
+                </svg>
+                {unreadMessageCount > 0 && (
+                  <span className="navbar__notification-badge">
+                    {unreadMessageCount > 99 ? "99+" : unreadMessageCount}
+                  </span>
+                )}
               </button>
             </div>
-              <div className="navbar__notification-wrapper" ref={notificationRef}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsNotificationsOpen((previous) => !previous);
-                    setIsMenuOpen(false);
-                  }}
-                  className="navbar__profile-button"
-                  aria-label="Open notifications"
-                >
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.93 6 11v5l-2 2v1h16v-1l-2-2z" />
-                  </svg>
-                  {unreadNotificationCount > 0 && (
-                    <span className="navbar__notification-badge">
-                      {unreadNotificationCount > 99 ? "99+" : unreadNotificationCount}
-                    </span>
-                  )}
-                </button>
-                {isNotificationsOpen && (
-                  <NotificationDropdown
-                    onUnreadCountChange={setUnreadNotificationCount}
-                    onClose={() => setIsNotificationsOpen(false)}
-                  />
+            <div className="navbar__notification-wrapper" ref={notificationRef}>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsNotificationsOpen((previous) => !previous);
+                  setIsMenuOpen(false);
+                }}
+                className="navbar__profile-button"
+                aria-label="Open notifications"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.93 6 11v5l-2 2v1h16v-1l-2-2z" />
+                </svg>
+                {unreadNotificationCount > 0 && (
+                  <span className="navbar__notification-badge">
+                    {unreadNotificationCount > 99
+                      ? "99+"
+                      : unreadNotificationCount}
+                  </span>
                 )}
-              </div>
+              </button>
+              {isNotificationsOpen && (
+                <NotificationDropdown
+                  onUnreadCountChange={setUnreadNotificationCount}
+                  onClose={() => setIsNotificationsOpen(false)}
+                />
+              )}
+            </div>
             <div className="navbar__profile-wrapper" ref={menuRef}>
               <button
                 type="button"

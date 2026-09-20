@@ -1,0 +1,90 @@
+.follow-suggestions {
+  align-self: start;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.follow-suggestions__heading {
+  margin-bottom: 16px;
+  color: var(--text);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+}
+
+.follow-suggestions__list {
+  display: grid;
+  gap: 14px;
+}
+
+.follow-suggestions__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.follow-suggestions__identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.follow-suggestions__avatar {
+  display: grid;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+}
+
+.follow-suggestions__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.follow-suggestions__avatar svg {
+  width: 21px;
+  height: 21px;
+  fill: var(--on-primary);
+}
+
+.follow-suggestions__details {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.follow-suggestions__details strong,
+.follow-suggestions__details small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.follow-suggestions__details small {
+  color: var(--text-muted);
+}
+
+.follow-suggestions__button {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}

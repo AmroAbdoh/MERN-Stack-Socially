@@ -8,21 +8,8 @@ import AuthResetPassword from "../pages/auth/AuthenticatedResetPassword";
 import PostPage from "../pages/Post/PostPage";
 import SearchPage from "../pages/Search/SearchPage";
 import Messaging from "../pages/Messaging/Messaging";
+import Home from "../pages/Home/Home";
 import AppLayout from "../layout/AppLayout/AppLayout";
-
-function HomePage() {
-  const userName = localStorage.getItem("userName") || "there";
-
-  return (
-    <>
-      <main className="home-page">
-        <p className="home-eyebrow">Socially</p>
-        <h1>Welcome back, {userName}.</h1>
-        <p>Your feed is ready for the next conversation.</p>
-      </main>
-    </>
-  );
-}
 
 function AppRouter() {
   return (
@@ -31,7 +18,7 @@ function AppRouter() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route element={<AppLayout />}>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Home />} />
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/post/:postId" element={<PostPage />} />
         <Route path="/search" element={<SearchPage />} />

@@ -1,0 +1,100 @@
+.message-avatar-rail {
+  align-self: start;
+  padding: 20px 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.message-avatar-rail__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  color: var(--text);
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+}
+
+.message-avatar-rail__heading button {
+  border: 0;
+  padding: 0 4px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.message-avatar-rail__users {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+}
+
+.message-avatar-rail__user {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.message-avatar-rail__avatar {
+  position: relative;
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  overflow: visible;
+  border: 3px solid var(--surface);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow: 0 0 0 1px var(--border);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.message-avatar-rail__user:hover .message-avatar-rail__avatar {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 8px 16px var(--shadow-primary);
+}
+
+.message-avatar-rail__avatar img {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.message-avatar-rail__avatar svg {
+  width: 28px;
+  height: 28px;
+  fill: var(--on-primary);
+}
+
+.message-avatar-rail__unread {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  display: grid;
+  min-width: 21px;
+  height: 21px;
+  place-items: center;
+  border: 2px solid var(--surface);
+  border-radius: 999px;
+  padding: 0 4px;
+  background: var(--danger);
+  color: var(--on-primary);
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.message-avatar-rail__status {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}

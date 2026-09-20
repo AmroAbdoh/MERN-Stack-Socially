@@ -71,6 +71,9 @@ const authenticatedRequest = async <T>(
 const getCurrentProfile = (): Promise<{ user: ProfileUser }> =>
   authenticatedRequest<{ user: ProfileUser }>("/users/me");
 
+const getFollowSuggestions = (): Promise<{ users: ProfileConnection[] }> =>
+  authenticatedRequest<{ users: ProfileConnection[] }>("/users/suggestions");
+
 const getProfileByUsername = (
   username: string,
 ): Promise<{ user: ProfileUser }> =>
@@ -85,6 +88,9 @@ const getUserPosts = (username: string): Promise<{ posts: ProfilePost[] }> =>
   authenticatedRequest<{ posts: ProfilePost[] }>(
     `/posts/user/${encodeURIComponent(username)}`,
   );
+
+const getFollowingFeed = (): Promise<{ posts: ProfilePost[] }> =>
+  authenticatedRequest<{ posts: ProfilePost[] }>("/feed?page=1&limit=20");
 
 const getPostById = (postId: string): Promise<{ post: ProfilePost }> =>
   authenticatedRequest<{ post: ProfilePost }>(`/posts/${postId}`);
@@ -224,9 +230,11 @@ const removeAvatar = async (): Promise<{ avatar: string }> => {
 export {
   getAssetUrl,
   getCurrentProfile,
+  getFollowSuggestions,
   getProfileByUsername,
   getMyPosts,
   getUserPosts,
+  getFollowingFeed,
   getPostById,
   getUserConnections,
   followUser,

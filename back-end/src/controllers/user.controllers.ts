@@ -91,6 +91,32 @@ const createConnectionsHandler = (connectionType: "followers" | "following") =>
 const getFollowers = createConnectionsHandler("followers");
 const getFollowing = createConnectionsHandler("following");
 
+const getFollowSuggestions = asyncHandler(async (req, res) => {
+  const userId = req.user?.userId;
+
+  if (!userId) throw new UnauthenticatedError("Authentication Invalid");
+
+  const currentUser = await User.findById(userId).select("following");
+  if (!currentUser) throw new UnauthenticatedError("user no longer exists");
+
+  const users = await User.find({
+    _id: { $ne: userId, $nin: currentUser.following },
+    $or: [{ followers: userId }, { followers: { $in: currentUser.following } }],
+  })
+    .select("name username avatar bio")
+    .limit(12);
+
+  res.status(StatusCodes.OK).json({
+    users: users.map((user) => ({
+      id: user._id,
+      name: user.name,
+      username: user.username,
+      avatar: user.avatar,
+      bio: user.bio,
+    })),
+  });
+});
+
 const updateProfile = asyncHandler(async (req, res) => {
   const userId = req.user?.userId;
 
@@ -256,6 +282,7 @@ export {
   getUserByUsername,
   getFollowers,
   getFollowing,
+  getFollowSuggestions,
   updateProfile,
   updateAvatar,
   removeAvatar,

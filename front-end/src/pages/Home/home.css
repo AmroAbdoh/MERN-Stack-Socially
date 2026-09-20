@@ -1,0 +1,111 @@
+.home-page {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 680px) minmax(260px, 300px);
+  align-items: start;
+  gap: 44px;
+  width: min(100% - 32px, 1280px);
+  margin: 0 auto;
+  padding: 38px 0 72px;
+}
+
+.home-page__feed {
+  min-width: 0;
+}
+
+.home-page__header {
+  display: block;
+  margin-bottom: 24px;
+}
+
+.home-page__composer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 10px 24px var(--shadow-accent);
+}
+
+.home-page__composer input {
+  min-width: 0;
+  flex: 1;
+  min-height: 44px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 11px 14px;
+  background: var(--surface-soft);
+  color: var(--text);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.home-page__composer input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.home-page__composer input::placeholder {
+  color: var(--text-muted);
+}
+
+.home-page__composer .primary-btn {
+  flex: 0 0 auto;
+  width: auto;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 12px;
+}
+
+.home-page__eyebrow {
+  margin: 0 0 5px;
+  color: var(--accent);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.home-page__message {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.home-page__message--error {
+  color: var(--danger);
+}
+
+@media (max-width: 760px) {
+  .home-page {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    width: min(100% - 32px, 680px);
+    padding-top: 28px;
+  }
+
+  .message-avatar-rail {
+    order: -1;
+  }
+
+  .message-avatar-rail__users {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .home-page__composer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .home-page__composer .primary-btn {
+    width: 100%;
+  }
+
+  .home-page__right-rail {
+    display: none;
+  }
+}

@@ -169,4 +169,9 @@ const getMessageContacts = asyncHandler(async (req, res) => {
   });
 });
 
-export { sendMessage, getConversation, getUnreadMessageCount, getMessageContacts };
+export {
+  sendMessage,
+  getConversation,
+  getUnreadMessageCount,
+  getMessageContacts,
+};

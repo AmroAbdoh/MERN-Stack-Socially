@@ -5,6 +5,7 @@ import {
   getUserByUsername,
   getFollowers,
   getFollowing,
+  getFollowSuggestions,
   updateProfile,
   updateAvatar,
   removeAvatar,
@@ -17,6 +18,7 @@ import { uploadAvatar } from "../middleware/upload.middleware";
 const router = Router();
 
 router.get("/me", authenticateUser, getCurrentUser);
+router.get("/suggestions", authenticateUser, getFollowSuggestions);
 router.get("/:username/followers", getFollowers);
 router.get("/:username/following", getFollowing);
 router.get("/:username", getUserByUsername);

@@ -9,10 +9,15 @@ import "./createPost.css";
 type CreatePostProps = {
   onClose: () => void;
   onCreated: (post: ProfilePost) => void;
+  initialDescription?: string;
 };
 
-function CreatePost({ onClose, onCreated }: CreatePostProps) {
-  const [description, setDescription] = useState("");
+function CreatePost({
+  onClose,
+  onCreated,
+  initialDescription = "",
+}: CreatePostProps) {
+  const [description, setDescription] = useState(initialDescription);
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [visibility, setVisibility] = useState<"public" | "private">("public");

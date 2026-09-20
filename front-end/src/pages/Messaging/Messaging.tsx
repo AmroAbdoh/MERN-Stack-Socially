@@ -57,9 +57,11 @@ function Messaging() {
         setSelectedUser(requestedUser || contactsResponse.users[0] || null);
         socket = connectMessageSocket(profileResponse.user.id);
         socket.on("newMessage", () => {
-          void getMessageContacts(requestedUserId || undefined).then((latest) => {
-            if (isCurrent) setUsers(latest.users);
-          });
+          void getMessageContacts(requestedUserId || undefined).then(
+            (latest) => {
+              if (isCurrent) setUsers(latest.users);
+            },
+          );
           const activeUser = selectedUserRef.current;
           if (!activeUser) return;
 
