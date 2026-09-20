@@ -62,7 +62,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api", commentRoutes);
 app.use("/api/feed", feedRoutes);
-app.use("/search", searchRoutes);
+app.use("/api/search", searchRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/messages", messageRoutes);
 app.use(errorHandler);
