@@ -12,6 +12,10 @@ import {
   getNotifications,
 } from "../../services/notifications";
 import {
+  connectMessageSocket,
+  getUnreadMessageCount,
+} from "../../services/messaging";
+import {
   getAssetUrl,
   getCurrentProfile,
   getCurrentProfilePath,
@@ -28,14 +32,20 @@ function Navbar() {
   const notificationRef = useRef<HTMLDivElement | null>(null);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
+  const [unreadMessageCount, setUnreadMessageCount] = useState(0);
 
   useEffect(() => {
     let disconnectNotifications: (() => void) | undefined;
+    let disconnectMessages: (() => void) | undefined;
 
     const syncAuthState = () => {
       const loggedIn = Boolean(localStorage.getItem("token"));
       setIsLoggedIn(loggedIn);
-      if (!loggedIn) setAvatar("");
+      if (!loggedIn) {
+        setAvatar("");
+        setUnreadMessageCount(0);
+        setUnreadNotificationCount(0);
+      }
     };
 
     const loadAvatar = async () => {
@@ -46,10 +56,14 @@ function Navbar() {
         setAvatar(response.user.avatar || "");
         const notifications = await getNotifications();
         setUnreadNotificationCount(notifications.unreadCount);
+        const messages = await getUnreadMessageCount();
+        setUnreadMessageCount(messages.unreadCount);
 
         const socket = connectNotificationSocket(response.user.id);
         const handleNewNotification = () => {
-          setUnreadNotificationCount((count) => count + 1);
+          void getNotifications().then((latest) => {
+            setUnreadNotificationCount(latest.unreadCount);
+          });
         };
         socket.on("newNotification", handleNewNotification);
 
@@ -57,6 +71,19 @@ function Navbar() {
           socket.off("newNotification", handleNewNotification);
           socket.emit("leaveNotifications", response.user.id);
           socket.disconnect();
+        };
+
+        const messageSocket = connectMessageSocket(response.user.id);
+        const handleNewMessage = () => {
+          void getUnreadMessageCount().then((latest) => {
+            setUnreadMessageCount(latest.unreadCount);
+          });
+        };
+        messageSocket.on("newMessage", handleNewMessage);
+        disconnectMessages = () => {
+          messageSocket.off("newMessage", handleNewMessage);
+          messageSocket.emit("leaveRoom", response.user.id);
+          messageSocket.disconnect();
         };
       } catch {
         setAvatar("");
@@ -82,10 +109,17 @@ function Navbar() {
 
     return () => {
       disconnectNotifications?.();
+      disconnectMessages?.();
       window.removeEventListener("storage", syncAuthState);
       window.removeEventListener("profilechange", loadAvatar);
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+
+  useEffect(() => {
+    const handleMessagesRead = () => setUnreadMessageCount(0);
+    window.addEventListener("messagesread", handleMessagesRead);
+    return () => window.removeEventListener("messagesread", handleMessagesRead);
   }, []);
 
   const handleLogout = () => {
@@ -120,11 +154,13 @@ function Navbar() {
         <ThemeToggle />
         {isLoggedIn ? (
           <>
-            <button
-              type="button"
-              onClick={() => navigate("/messages")}
-              className="navbar__profile-button"
-            >
+            <div className="navbar__message-wrapper">
+              <button
+                type="button"
+                onClick={() => navigate("/messages")}
+                className="navbar__profile-button"
+                aria-label="Open messages"
+              >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
@@ -135,7 +171,13 @@ function Navbar() {
                 <path d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4-.983L2 17l1.983-3.017A6.979 6.979 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7z" />
                 {/* Message */}
               </svg>
-            </button>
+              {unreadMessageCount > 0 && (
+                <span className="navbar__notification-badge">
+                  {unreadMessageCount > 99 ? "99+" : unreadMessageCount}
+                </span>
+              )}
+              </button>
+            </div>
               <div className="navbar__notification-wrapper" ref={notificationRef}>
                 <button
                   type="button"

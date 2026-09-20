@@ -7,6 +7,7 @@ import Profile from "../pages/Profile/Profile";
 import AuthResetPassword from "../pages/auth/AuthenticatedResetPassword";
 import PostPage from "../pages/Post/PostPage";
 import SearchPage from "../pages/Search/SearchPage";
+import Messaging from "../pages/Messaging/Messaging";
 import AppLayout from "../layout/AppLayout/AppLayout";
 
 function HomePage() {
@@ -34,6 +35,7 @@ function AppRouter() {
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/post/:postId" element={<PostPage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/messages" element={<Messaging />} />
         <Route path="/auth-reset-password" element={<AuthResetPassword />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" replace />} />

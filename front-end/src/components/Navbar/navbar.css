@@ -87,6 +87,10 @@
   position: relative;
 }
 
+.navbar__message-wrapper {
+  position: relative;
+}
+
 .navbar__profile-button {
   display: grid;
   width: 42px;

@@ -236,6 +236,14 @@ function Profile() {
                   disabled={isFollowLoading}
                   onClick={toggleFollow}
                 />
+                <PrimaryButton
+                  label="Message"
+                  type="button"
+                  variant="secondary"
+                  onClick={() =>
+                    navigate(`/messages?user=${encodeURIComponent(user.id)}`)
+                  }
+                />
                 {followError && (
                   <p className="profile-message error">{followError}</p>
                 )}

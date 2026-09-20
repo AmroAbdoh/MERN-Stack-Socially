@@ -1,0 +1,145 @@
+.conversation-list {
+  min-width: 0;
+  padding: 28px 18px;
+  border-right: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.conversation-list__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.conversation-list__eyebrow {
+  margin: 0 0 5px;
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.conversation-list h1 {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.55rem;
+}
+
+.conversation-list__count {
+  display: grid;
+  min-width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-soft);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.conversation-list__items {
+  display: grid;
+  gap: 6px;
+}
+
+.conversation-list__item {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 10px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.conversation-list__item:hover,
+.conversation-list__item.is-active {
+  border-color: var(--border);
+  background: var(--surface-soft);
+}
+
+.conversation-list__item.is-active {
+  border-color: var(--accent);
+}
+
+.conversation-list__avatar {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+}
+
+.conversation-list__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.conversation-list__avatar svg {
+  width: 25px;
+  height: 25px;
+  fill: var(--on-primary);
+}
+
+.conversation-list__details {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.conversation-list__details strong,
+.conversation-list__details span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversation-list__details span,
+.conversation-list__message {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.conversation-list__arrow {
+  color: var(--accent);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.conversation-list__meta {
+  display: grid;
+  min-width: 24px;
+  justify-items: end;
+}
+
+.conversation-list__unread {
+  display: grid;
+  min-width: 22px;
+  height: 22px;
+  place-items: center;
+  border-radius: 999px;
+  padding: 0 5px;
+  background: var(--danger);
+  color: var(--on-primary);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.conversation-list__message {
+  margin: 0;
+  line-height: 1.6;
+}
